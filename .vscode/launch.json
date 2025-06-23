@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-BackendTemplateshopApplication<backend-templateshop>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.nhanit.backend_templateshop.BackendTemplateshopApplication",
+      "projectName": "backend-templateshop",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

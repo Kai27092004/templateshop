@@ -1,0 +1,12 @@
+Công việc làm hôm nay: Xây dựng nền móng cho Backend, Xây dựng Lớp bảo mật cơ bản, Xây dựng Chức năng Đăng ký (chưa xong)
+1.Tạo Entity User và Role
+2.Tạo UserRepository 
+3.Tạo UserDetailsService và cấu hình SecurityConfig
+4.1.Tạo các DTO (Data Transfer Objects) để nhận dữ liệu từ client.
+	+Tạo DTO cho yêu cầu đăng ký (RegisterRequest.java)
+	+Tạo DTO cho phản hồi xác thực (AuthResponse.java)
+4.2.Tạo AuthService để xử lý logic đăng ký.
+	+Tạo Interface (AuthService.java)
+	+Tạo Lớp triển khai (AuthServiceImpl.java)
+	+Tạo Exception tùy chỉnh
+4.3.Tạo AuthController để tạo ra API endpoint.
