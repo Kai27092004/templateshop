@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS users
     full_name			NVARCHAR(100) 		NULL,
     email				VARCHAR(100)		NOT NULL UNIQUE,
     password			VARCHAR(255)		NOT NULL,
-    role				VARCHAR(20)		NOT NULL DEFAULT 'USER', -- Mặc định là 'Người dùng', có thể là 'Quản trị viên'
+    role				VARCHAR(20)		    NOT NULL DEFAULT 'USER', -- Mặc định là 'Người dùng', có thể là 'Quản trị viên'
     created_at			TIMESTAMP			DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -81,7 +81,6 @@ INSERT INTO categories (name, slug) VALUES
 INSERT INTO users (full_name, email, password, role) VALUES
 ('Quản Trị Viên', 'admin@email.com', 'admin123', 'ADMIN'), 
 ('Khách Hàng A', 'customer.a@email.com', 'user123', 'USER'); 
-
 
 -- Thêm 3 template mẫu
 INSERT INTO templates (name, slug, description, price, category_id, thumbnail_url, live_demo_url, file_path) VALUES

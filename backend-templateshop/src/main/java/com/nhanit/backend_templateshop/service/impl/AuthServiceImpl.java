@@ -38,4 +38,5 @@ public class AuthServiceImpl implements AuthService {
     // 5. Lưu đối tượng User vào CSDL
     return userRepository.save(user);
   }
+
 }
