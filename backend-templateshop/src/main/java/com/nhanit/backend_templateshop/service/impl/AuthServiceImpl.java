@@ -2,14 +2,20 @@ package com.nhanit.backend_templateshop.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.nhanit.backend_templateshop.dto.request.LoginRequest;
 import com.nhanit.backend_templateshop.dto.request.RegisterRequest;
 import com.nhanit.backend_templateshop.entity.Role;
 import com.nhanit.backend_templateshop.entity.User;
 import com.nhanit.backend_templateshop.exception.AppException;
 import com.nhanit.backend_templateshop.repository.UserRepository;
+import com.nhanit.backend_templateshop.security.jwt.JwtTokenProvider;
 import com.nhanit.backend_templateshop.service.AuthService;
 
 @Service
@@ -19,6 +25,11 @@ public class AuthServiceImpl implements AuthService {
 
   @Autowired
   private PasswordEncoder passwordEncoder;
+
+  @Autowired
+  private AuthenticationManager authenticationManager;
+  @Autowired
+  private JwtTokenProvider jwtTokenProvider;
 
   @Override
   public User register(RegisterRequest registerRequest) {
@@ -37,6 +48,19 @@ public class AuthServiceImpl implements AuthService {
     user.setRole(Role.USER);
     // 5. Lưu đối tượng User vào CSDL
     return userRepository.save(user);
+  }
+
+  @Override
+  public String login(LoginRequest loginRequest) {
+    // 1. Xác thực người dùng bằng email và password
+    Authentication authentication = authenticationManager
+        .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+
+    // 2. Nếu xác thực thành công, lưu thông tin vào SecurityContext
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+
+    // 3. Tạo và trả về JWT token
+    return jwtTokenProvider.generationToken(authentication);
   }
 
 }

@@ -88,4 +88,11 @@ INSERT INTO templates (name, slug, description, price, category_id, thumbnail_ur
 ('The Ocean Villa Template', 'the-ocean-villa', 'Landing page sang trọng, tập trung vào hình ảnh, phù hợp cho các dự án nghỉ dưỡng, biệt thự biển.', 500000, 1, 'https://placehold.co/600x400/1abc9c/ffffff?text=Ocean+Villa', '#', '/files/ocean.zip'),
 ('Seoul Fashion Week Template', 'seoul-fashion', 'Mẫu landing page trẻ trung, năng động, phù hợp cho các sự kiện thời trang, cửa hàng quần áo hoặc bộ sưu tập mỹ phẩm mới.', 200000, 2, 'https://placehold.co/600x400/9b59b6/ffffff?text=Seoul+Fashion', '#', '/files/seoul.zip');
 
+-- USE template_shop_db;
+-- UPDATE users 
+-- SET password = '$2a$10$NfcrUXuD0ZLAzOGcQRvGZe3WZCXHi7cVgsYPY4QUmgbBfqCkpRbPe' 
+-- WHERE email = 'customer.a@email.com';
+
+-- USE template_shop_db;
+-- ALTER TABLE templates ADD COLUMN updated_at TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP AFTER created_at;
 

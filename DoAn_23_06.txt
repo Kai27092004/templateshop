@@ -1,0 +1,64 @@
+Công việc làm hôm nay: Hoàn thành chức năng đăng ký, Chức năng Đăng nhập (Login), Xây dựng Bộ lọc xác thực JWT (JWT Authentication Filter), Xây dựng Chức năng Quản lý Danh mục (Category),Xây dựng nền tảng cho Quản lý Template
+1.Xây dựng AuthController
+	+Tạo API Endpoint /api/auth/register
+	+Tạo Trình xử lý ngoại lệ toàn cục (Global Exception Handler)
+	+Cấu hình Spring Security để cho phép truy cập API Đăng ký
+	+Kiểm thử bằng postman
+2.Xây dựng nền tảng cho JWT
+	+Kiểm tra pom.xml (thêm các dependency cần thiết để làm việc với JWT)
+	+Tạo JwtTokenProvider trong security/jwt
+	+Tạo LoginRequest DTO
+	+Cập nhật AuthService và AuthServiceImpl
+	+Nếu có lỗi thì thêm AuthenticationManager Bean ở config
+	+Tạo API Endpoint cho Đăng nhập
+3.Xây dựng Bộ lọc xác thực JWT (JWT Authentication Filter)
+	+Tạo JwtAuthFilter.java trong security/jwt
+	+Tích hợp Filter vào SecurityConfig
+	+Tạo và Kiểm thử API được bảo vệ
+4.Xây dựng Chức năng Quản lý Danh mục (Category)
+	+Tạo các lớp Entity, Repository và DTO cho Category 
+		1/Tạo Entity Category.java
+		2/Tạo CategoryRepository.java
+		3/Tạo CategoryDto.java trong dto/response
+	+Xây dựng Lớp Service cho Danh mục
+		1/Thêm một công cụ hữu ích - ModelMapper
+		2/Tạo Bean cho ModelMapper file mới Appconfig.java
+		3/Tạo Interface CategoryService.java
+		4/Tạo lớp triển khai CategoryServiceImpl.java
+		5/Tạo ResourceNotFoundException.java
+	+Xây dựng CategoryController
+		1/Tạo file CategoryController.java
+		2/Kích hoạt @PreAuthorize thêm annotation trong SecurityConfig.java
+	+Kiểm thử API Quản lý Danh mục bằng Postman
+		1/Chuẩn bị "Chìa khóa" của Admin
+		2/Kịch bản 1: Lấy danh sách tất cả danh mục (Public API)
+		3/Kịch bản 2: Tạo một danh mục mới (Admin API)
+		4/Kịch bản 3: Cập nhật danh mục (Admin API)
+		5/Kịch bản 4: Xóa một danh mục (Admin API)
+		6/Kịch bản 5: Thử truy cập API Admin bằng tài khoản User thường
+5.Xây dựng nền tảng cho Quản lý Template
+	+Tạo các lớp nền tảng: Entity, Repository và DTO.
+		1/Tạo Entity Template.java
+		2/Tạo TemplateRepository.java
+		3/Tạo TemplateDto.java (Response)
+		4/CreateTemplateRequest.java (Request)
+	+Xây dựng Lớp Service cho Template
+		1/Tạo Interface TemplateService.java
+		2/Tạo lớp triển khai TemplateServiceImpl.java
+	+API Quản lý Sản phẩm (Template)
+		1/Tạo file TemplateController.java
+	+Xây dựng Lớp Service cho Template
+		1/Cấu hình thư mục Upload
+		2/Tạo FileStorageService (Tạo Interface FileStorageService.java)
+		3/Tạo lớp triển khai FileStorageServiceImpl.java
+		4/Cập nhật TemplateServiceImpl để sử dụng FileStorageService
+	+Xây dựng chức năng Cập nhật và Xóa Template
+		1/Tạo file UpdateTemplateRequest.java trong package dto/request.
+		2/Cập nhật TemplateService và TemplateServiceImpl
+		3/Cập nhật file TemplateController.java
+	+Kiểm thử API Quản lý Danh mục bằng Postman
+
+
+
+
+
