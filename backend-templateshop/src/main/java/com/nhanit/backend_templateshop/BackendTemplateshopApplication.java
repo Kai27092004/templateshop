@@ -3,7 +3,6 @@ package com.nhanit.backend_templateshop;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
 //@SpringBootApplication(exclude = { SecurityAutoConfiguration.class }) // Bỏ qua cấu hình bảo mật tự động
 @SpringBootApplication // Bỏ qua cấu hình bảo mật tự động

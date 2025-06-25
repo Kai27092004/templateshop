@@ -2,8 +2,8 @@ package com.nhanit.backend_templateshop.security.jwt;
 
 import java.io.IOException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+// import org.slf4j.Logger;
+// import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +24,8 @@ import jakarta.servlet.http.HttpServletResponse;
 // OncePerRequestFilter đảm bảo filter này chỉ chạy một lần cho mỗi request
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-  private static final Logger logger = LoggerFactory.getLogger(JwtAuthFilter.class);
+  // private static final Logger logger =
+  // LoggerFactory.getLogger(JwtAuthFilter.class);
 
   @Autowired
   private JwtTokenProvider jwtTokenProvider;

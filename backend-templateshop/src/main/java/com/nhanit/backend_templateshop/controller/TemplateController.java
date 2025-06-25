@@ -23,7 +23,6 @@ import com.nhanit.backend_templateshop.dto.request.UpdateTemplateRequest;
 import com.nhanit.backend_templateshop.dto.response.TemplateResponse;
 import com.nhanit.backend_templateshop.service.TemplateService;
 
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/templates")
