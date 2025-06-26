@@ -3,6 +3,8 @@ import MainLayout from "./components/layout/MainLayout";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPgae from "./pages/RegisterPage";
+import ProductDetailPage from "./pages/ProductDetailPage";
+import CartPage from './pages/CartPage';
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
         <Route index element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPgae />} />
+        <Route path="templates/:slug" element={<ProductDetailPage />} />
+        <Route path="cart" element={<CartPage />} />
       </Route>
       {/* Các route không có layout chung, ví dụ trang đăng nhập/đăng ký */}
 

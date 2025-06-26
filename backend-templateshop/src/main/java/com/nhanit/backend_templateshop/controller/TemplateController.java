@@ -23,7 +23,6 @@ import com.nhanit.backend_templateshop.dto.request.UpdateTemplateRequest;
 import com.nhanit.backend_templateshop.dto.response.TemplateResponse;
 import com.nhanit.backend_templateshop.service.TemplateService;
 
-
 @RestController
 @RequestMapping("/api/v1/templates")
 public class TemplateController {
@@ -40,9 +39,9 @@ public class TemplateController {
     return ResponseEntity.ok(templateService.getAllTemplates());
   }
 
-  @GetMapping("/{id}")
-  public ResponseEntity<TemplateResponse> getTemplateById(@PathVariable(name = "id") Long templateId) {
-    return ResponseEntity.ok(templateService.getTemplateById(templateId));
+  @GetMapping("/{slug}")
+  public ResponseEntity<TemplateResponse> getTemplateBySlug(@PathVariable(name = "slug") String templateSlug) {
+    return ResponseEntity.ok(templateService.getTemplateBySlug(templateSlug));
   }
 
   // CÁC API YÊU CẦU QUYỀN ADMIN

@@ -74,6 +74,13 @@ public class TemplateServiceImpl implements TemplateService {
   }
 
   @Override
+  public TemplateResponse getTemplateBySlug(String slug) {
+    Template template = templateRepository.findBySlug(slug)
+        .orElseThrow(() -> new ResourceNotFoundException("Template", "slug", slug));
+    return modelMapper.map(template, TemplateResponse.class);
+  }
+
+  @Override
   public TemplateResponse updateTemplate(Long templateId, UpdateTemplateRequest request, MultipartFile file) {
     // 1. Tìm template cần cập nhật trong CSDL
     Template template = templateRepository.findById(templateId)

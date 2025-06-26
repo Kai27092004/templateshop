@@ -21,4 +21,6 @@ public interface TemplateService {
 
   void deleteTemplate(Long templateId);
 
+  TemplateResponse getTemplateBySlug(String slug);
+
 }
