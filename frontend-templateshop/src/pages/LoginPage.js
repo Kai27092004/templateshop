@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import { loginUser } from '../services/authService';
 import { useAuth } from '../contexts/AuthContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
   const [error, setError] = useState('');
+
+  const from = location.state?.from?.pathname || "/";
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,7 +28,7 @@ const LoginPage = () => {
       // Nếu thành công, gọi hàm login từ context để lưu token
       login(response.data.accessToken);
       // Điều hướng về trang chủ 
-      navigate('/');
+      navigate(from, {replace: true});
     } catch (err) {
       setError('Đăng nhập thất bại. Vui lòng kiểm tra email hoặc mật khẩu.');
     }

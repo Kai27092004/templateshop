@@ -1,0 +1,104 @@
+// src/pages/ProfilePage.js
+import React, { useState, useEffect } from 'react';
+import { getUserProfile, getOrderHistory } from '../services/userService';
+import api from '../services/api'; // Import api instance
+
+const ProfilePage = () => {
+  const [profile, setProfile] = useState(null);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const profilePromise = getUserProfile();
+        const ordersPromise = getOrderHistory();
+        const [profileResponse, ordersResponse] = await Promise.all([profilePromise, ordersPromise]);
+
+        setProfile(profileResponse.data);
+        setOrders(ordersResponse.data);
+      } catch (err) {
+        console.error("Failed to fetch user data:", err);
+        setError('Không thể tải dữ liệu người dùng. Vui lòng thử lại.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const handleDownload = (templateId, fileName) => {
+    api({
+      url: `/account/download/${templateId}`,
+      method: 'GET',
+      responseType: 'blob',
+    }).then((response) => {
+      // SỬA LẠI 1: Đổi createdObjectUrl -> createObjectURL
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', fileName || 'template.zip');
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url); // Giải phóng bộ nhớ
+    }).catch(err => {
+      console.error("Download error:", err);
+      alert("Bạn không có quyền tải file này hoặc đã có lỗi xảy ra.");
+    });
+  };
+
+  if (loading) return <div className="text-center mt-10">Đang tải trang hồ sơ...</div>;
+  if (error) return <div className="text-center mt-10 text-red-500">{error}</div>;
+
+  return (
+    <div className="container mx-auto p-4">
+      {/* Phần thông tin cá nhân */}
+      {profile && (
+        <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+          <h2 className="text-2xl font-semibold mb-4">Thông tin cá nhân</h2>
+          <div className="space-y-2">
+            <p><strong>Họ và tên:</strong> {profile.fullName}</p>
+            <p><strong>Email:</strong> {profile.email}</p>
+            <p><strong>Ngày tham gia:</strong> {new Date(profile.createdAt).toLocaleDateString('vi-VN')}</p>
+          </div>
+        </div>
+      )}
+
+      {/* Phần lịch sử đơn hàng */}
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <h2 className="text-2xl font-semibold mb-4">Các sản phẩm đã mua</h2>
+        {orders.length > 0 ? (
+          <div className="space-y-6">
+            {orders.map(order => (
+              <div key={order.id} className="border-t pt-4">
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="text-lg font-bold">Đơn hàng #{order.id}</h3>
+                  <span className="text-sm text-gray-500">{new Date(order.orderDate).toLocaleString('vi-VN')}</span>
+                </div>
+                {order.orderDetails.map(detail => (
+                  <div key={detail.template.id} className="flex justify-between items-center py-2 border-b">
+                    <span>{detail.template.name}</span>
+                    <button
+                      // SỬA LẠI 2: Dùng template literal `` thay vì chuỗi ''
+                      onClick={() => handleDownload(detail.template.id, `${detail.template.slug}.zip`)}
+                      className="bg-green-500 text-white py-1 px-3 rounded text-sm hover:bg-green-600 transition-colors"
+                    >
+                      Tải xuống
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p>Bạn chưa mua sản phẩm nào.</p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default ProfilePage;

@@ -1,11 +1,50 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import { useAuth } from '../contexts/AuthContext';
+import { createOrder } from '../services/orderService';
 import CartItem from '../components/cart/CartItem';
 
 const CartPage = () => {
 
-  const { cartItems, cartTotal } = useCart();
+  const { cartItems, cartTotal, clearCart } = useCart();
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  const [error, setError] = useState('');
+
+  const handleCheckout = async () => {
+    // 1. Kiểm tra xem người dùng đã đăng nhập chưa
+    if (!isAuthenticated) {
+      navigate('/login', { state: { from: '/cart' } });
+      return;
+    }
+
+    // 2. Chuẩn bị dữ liệu để gửi lên API
+    const orderData = {
+      cartItems: cartItems.map(item => ({
+        templateId: item.id,
+        quantity: item.quantity,
+      })),
+    };
+    try {
+      // 3. Gọi API tạo đơn hàng
+      const response = await createOrder(orderData);
+
+      // 4. Xử lý khi thành công
+      clearCart();
+
+      // Lấy ID đơn hàng từ response để hiển thị
+      const orderIdMessage = response.data;
+      const orderId = orderIdMessage.split(': ')[1];
+
+      // Điều hướng đến trang thành công và truyền theo orderId
+      navigate('/order-success', { state: { orderId: orderId } });
+    } catch (err) {
+      console.error("Checkout error: ", err);
+      setError("Đã có lỗi xảy ra khi đặt hàng. Vui lòng thử lại.");
+    }
+  };
 
   const formattedTotal = new Intl.NumberFormat('vi-VN', {
     style: 'currency',
@@ -49,7 +88,11 @@ const CartPage = () => {
             <span>{formattedTotal}</span>
           </div>
           <p className="text-sm text-gray-500 mt-2">Phí vận chuyển sẽ được tính ở bước thanh toán.</p>
-          <button className="w-full mt-4 bg-red-500 text-white py-3 rounded-lg font-semibold text-lg hover:bg-red-600 transition-colors">
+          {error && <p className="text-sm text-red-600 my-2">{error}</p>}
+          <button
+            onClick={handleCheckout}
+            className="w-full mt-4 bg-red-500 text-white py-3 rounded-lg font-semibold text-lg hover:bg-red-600 transition-colors"
+          >
             Tiến hành Thanh Toán
           </button>
         </div>

@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS templates
     file_path			VARCHAR(255)		NOT NULL,
     category_id			BIGINT				NULL,
     created_at			TIMESTAMP			DEFAULT CURRENT_TIMESTAMP,
+    updated_at			TIMESTAMP			DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(category_id) REFERENCES categories(id) ON DELETE SET NULL -- Nếu xóa danh mục thì trường này thành NULL
 );
 
@@ -79,8 +80,8 @@ INSERT INTO categories (name, slug) VALUES
 -- LƯU Ý: Mật khẩu '123456' này chỉ là placeholder.
 -- Trong ứng dụng thực tế, bạn PHẢI mã hóa (hash) mật khẩu bằng BCrypt.
 INSERT INTO users (full_name, email, password, role) VALUES
-('Quản Trị Viên', 'admin@email.com', 'admin123', 'ADMIN'), 
-('Khách Hàng A', 'customer.a@email.com', 'user123', 'USER'); 
+('Quản Trị Viên', 'admin@email.com', '$2a$10$o2Vpobr8u4IK3J9c1bK3LOR3KPHVUkdhOpwYKUijMAj22w7AFoujq', 'ADMIN'), 
+('Khách Hàng A', 'customer.a@email.com', '$2a$10$NfcrUXuD0ZLAzOGcQRvGZe3WZCXHi7cVgsYPY4QUmgbBfqCkpRbPe', 'USER'); 
 
 -- Thêm 3 template mẫu
 INSERT INTO templates (name, slug, description, price, category_id, thumbnail_url, live_demo_url, file_path) VALUES

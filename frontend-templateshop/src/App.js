@@ -5,7 +5,9 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPgae from "./pages/RegisterPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import CartPage from './pages/CartPage';
-
+import OrderSuccessPage from "./pages/OrderSuccessPage";
+import ProfilePage from "./pages/ProfilePage";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 function App() {
   return (
     <Routes>
@@ -16,6 +18,8 @@ function App() {
         <Route path="/register" element={<RegisterPgae />} />
         <Route path="templates/:slug" element={<ProductDetailPage />} />
         <Route path="cart" element={<CartPage />} />
+        <Route path="order-success" element={<OrderSuccessPage />} />
+        <Route path="profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
       </Route>
       {/* Các route không có layout chung, ví dụ trang đăng nhập/đăng ký */}
 

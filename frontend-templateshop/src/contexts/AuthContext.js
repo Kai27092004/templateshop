@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect, createContext } from "react";
-import api from "../services/api";
 
 // 1. Tạo Context
 const AuthContext = createContext();
@@ -10,41 +9,36 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loading, setLoading] = useState(true);
 
+  // useEffect này bây giờ chỉ chạy một lần lúc khởi động
   useEffect(() => {
-    // Mỗi khi token thay đổi, cập nhật header của axios
-    if (token) {
-      api.defaults.headers.common['Authorization'] = `Bearer &{token}`;
-      localStorage.setItem('token', token);
-      // Bạn có thể thêm logic để lấy thông tin user từ token ở đây nếu cần
-    } else {
-      delete api.defaults.headers.common['Authoriztion'];
-      localStorage.removeItem('token');
+    const tokenFromStorage = localStorage.getItem('token');
+    if (tokenFromStorage) {
+      setToken(tokenFromStorage);
     }
     setLoading(false);
-  }, [token]);
+  }, []);
 
   // Hàm để đăng nhập
   const login = (newToken) => {
-    setToken(newToken);
+    localStorage.setItem('token', newToken); // Lưu vào localStorage
+    setToken(newToken); // Cập nhật state
   };
 
   // Hàm để đăng xuất
   const logout = () => {
+    localStorage.removeItem('token'); // Xóa khỏi localStorage
+    setToken(null); // Cập nhật state
     setUser(null);
-    setToken(null);
   };
 
   const authContextValue = {
     token,
     user,
+    loading,
     login,
     logout,
     isAuthenticated: !!token, // Một boolean tiện ích để kiểm tra đã đăng nhập chưa
   };
-
-  if (loading) {
-    return null;
-  }
 
   return (
     <AuthContext.Provider value={authContextValue}>

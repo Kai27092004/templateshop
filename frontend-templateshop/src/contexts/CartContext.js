@@ -57,12 +57,17 @@ export const CartProvider = ({ children }) => {
     );
   };
 
+  const clearCart = () => {
+    setCartItems([]);
+  };
+
   // Các giá trị và hàm sẽ được cung cấp cho toàn bộ ứng dụng
   const cartContextValue = {
     cartItems,
     addToCart,
     removeFromCart,
     updateQuantity,
+    clearCart,
     // Tính toán các giá trị tiện ích
     itemCount: cartItems.reduce((sum, item) => sum + item.quantity, 0),
     cartTotal: cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0),

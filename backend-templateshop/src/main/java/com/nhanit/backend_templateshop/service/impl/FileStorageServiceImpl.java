@@ -1,6 +1,7 @@
 package com.nhanit.backend_templateshop.service.impl;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -9,12 +10,15 @@ import java.nio.file.StandardCopyOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.nhanit.backend_templateshop.exception.AppException;
+import com.nhanit.backend_templateshop.exception.ResourceNotFoundException;
 import com.nhanit.backend_templateshop.service.FileStorageService;
 
 import jakarta.annotation.PostConstruct;
@@ -78,6 +82,21 @@ public class FileStorageServiceImpl implements FileStorageService {
       // Ném ra exception nếu có lỗi trong quá trình xóa file
       logger.error("Không thể xóa file: {}", fileName);
       throw new AppException("Không thể xóa file " + fileName, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Override
+  public Resource loadFileAsResource(String fileName) {
+    try {
+      Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+      Resource resource = new UrlResource(filePath.toUri());
+      if (resource.exists()) {
+        return resource;
+      } else {
+        throw new ResourceNotFoundException("File", "name", fileName);
+      }
+    } catch (MalformedURLException ex) {
+      throw new ResourceNotFoundException("File", "name", fileName);
     }
   }
 }

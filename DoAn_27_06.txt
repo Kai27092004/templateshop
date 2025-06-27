@@ -1,0 +1,52 @@
+Công việc làm hôm nay:Xây dựng API Đặt hàng ở Backend, Tích hợp Chức năng Đặt hàng ở Frontend, Xây dựng API cho Trang Hồ sơ cá nhân, Xây dựng Trang Hồ sơ cá nhân ở Frontend, Bảo vệ Route và Xây dựng Trang Hồ sơ cá nhân, Xây dựng API Tải file an toàn
+
+---Xây dựng API Đặt hàng ở Backend
+	+Xem lại và Tạo các lớp nền tảng cho Order
+		1/Xem lại Entity
+		2/Tạo Repository cho Order
+		3/Tạo DTO cho Order
+	+Xây dựng OrderService
+		1/Tạo Interface OrderService.java
+		2/Tạo lớp triển khai OrderServiceImpl.java
+	+Xây dựng OrderController
+---Tích hợp Chức năng Đặt hàng ở Frontend
+	+Tạo Service để gọi API Đặt hàng
+		1/Trong thư mục src/services/, tạo một file mới tên là orderService.js.
+	+Cải tiến CartContext để có chức năng Xóa giỏ hàng
+		1/Mở file src/contexts/CartContext.js.
+		2/Thêm hàm clearCart và cung cấp nó ra ngoài.
+	+Tạo Trang Cảm ơn sau khi Đặt hàng
+		1/Trong thư mục src/pages/, tạo file OrderSuccessPage.js
+	+Cập nhật CartPage.js với logic Checkout
+		1/Mở file src/pages/CartPage.js.
+	+Cập nhật App.js
+---Xây dựng API cho Trang Hồ sơ cá nhân
+	+Tạo các DTO mới cho Phản hồi (Response)
+	+Xây dựng UserService và OrderService mới
+		1/Cập nhật OrderRepository
+		2/Cập nhật UserService
+		3/Cập nhật OrderService
+		4/Tạo AccountController
+--- Xây dựng Trang Hồ sơ cá nhân ở Frontend
+	+Tạo các Service cần thiết
+		1/Trong thư mục src/services/, tạo một file mới tên là userService.js.
+		2/Tạo Component ProfilePage.js
+	+Cập nhật App.js để thêm Route
+		1/ Mở App.js Import ProfilePage và thêm Route mới vào bên trong MainLayout.
+---Bảo vệ Route và Xây dựng Trang Hồ sơ cá nhân
+	+Tạo một component ProtectedRoute để kiểm tra trạng thái đăng nhập.
+		1/Trong thư mục src/components/, tạo một thư mục mới tên là auth.
+		2/Bên trong src/components/auth/, tạo file ProtectedRoute.js.
+		3/Cập nhật LoginPage.js để xử lý chuyển hướng
+	+Sử dụng ProtectedRoute để bảo vệ trang /profile.
+		1/Cập nhật App.js để sử dụng ProtectedRoute
+	+Xây dựng hoàn chỉnh trang ProfilePage để hiển thị thông tin người dùng và lịch sử đơn hàng.
+---Xây dựng API Tải file an toàn
+	+Nâng cấp FileStorageService
+		1/Mở file service/FileStorageService.java và thêm phương thức mới.
+		2/Mở file service/impl/FileStorageServiceImpl.java và triển khai phương thức đó.
+	+Nâng cấp OrderService để kiểm tra quyền sở hữu
+		1/Mở repository/OrderRepository.java và thêm phương thức kiểm tra mới.
+		2/Mở service/OrderService.java và service/impl/OrderServiceImpl.java để thêm logic tương ứng.
+	+Cập nhật AccountController để thêm API Download
+		1/Mở controller/AccountController.java và thêm phương thức mới.

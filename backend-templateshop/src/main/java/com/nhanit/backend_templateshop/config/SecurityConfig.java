@@ -1,8 +1,12 @@
 package com.nhanit.backend_templateshop.config;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -15,6 +19,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.nhanit.backend_templateshop.security.JwtAuthEntryPoint;
 import com.nhanit.backend_templateshop.security.UserDetailsServiceImpl;
@@ -48,10 +54,24 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http.csrf(csrf -> csrf.disable()) // Vô hiệu hóa CSRF vì chúng ta dùng API
+    http
+        // 1. Cấu hình CORS bằng cách sử dụng một Bean tùy chỉnh
+        .cors(cors -> {
+          CorsConfiguration configuration = new CorsConfiguration();
+          configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+          configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+          configuration.setAllowedHeaders(Collections.singletonList("*"));
+          configuration.setAllowCredentials(true);
+          UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+          source.registerCorsConfiguration("/api/**", configuration);
+          cors.configurationSource(source);
+        })
+        .csrf(csrf -> csrf.disable()) // Vô hiệu hóa CSRF vì chúng ta dùng API
         .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
         // Cho phép tất cả các request tới /api/v1/auth/** (đăng ký, đăng nhập)
         .authorizeHttpRequests(auth -> auth
+            // Cho phép tất cả các request với phương thức OPTIONS đi qua
+            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             .requestMatchers("/api/v1/auth/**").permitAll()
             // Cho phép các request GET tới /api/v1/categories/**
             .requestMatchers("/api/v1/categories/**").permitAll()
