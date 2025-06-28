@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect, createContext } from "react";
+import { jwtDecode } from 'jwt-decode';
 
 // 1. Tạo Context
 const AuthContext = createContext();
@@ -13,15 +14,34 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const tokenFromStorage = localStorage.getItem('token');
     if (tokenFromStorage) {
-      setToken(tokenFromStorage);
+      try {
+        const decodedToken = jwtDecode(tokenFromStorage);
+        // Kiểm tra xem token đã hết hạn chưa
+        if (decodedToken.exp * 1000 < Date.now()) {
+          logout(); // Nếu hết hạn, tự động đăng xuất
+        } else {
+          setToken(tokenFromStorage);
+          // Lưu thông tin người dùng (email và roles) vào state
+          setUser({ email: decodedToken.sub, roles: decodedToken.roles || [] });
+        }
+      } catch (error) {
+        console.error("Invalid token found in localStorage", error);
+        logout();
+      }
     }
     setLoading(false);
   }, []);
 
   // Hàm để đăng nhập
   const login = (newToken) => {
-    localStorage.setItem('token', newToken); // Lưu vào localStorage
-    setToken(newToken); // Cập nhật state
+    try {
+      const decodedToken = jwtDecode(newToken);
+      localStorage.setItem('token', newToken);
+      setToken(newToken);
+      setUser({ email: decodedToken.sub, roles: decodedToken.roles || [] });
+    } catch (error) {
+      console.error("Failed to decode token on login", error);
+    }
   };
 
   // Hàm để đăng xuất
@@ -38,6 +58,7 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     isAuthenticated: !!token, // Một boolean tiện ích để kiểm tra đã đăng nhập chưa
+    isAdmin: user?.roles.includes('ROLE_ADMIN'), // Một boolean tiện ích để kiểm tra quyền admin
   };
 
   return (

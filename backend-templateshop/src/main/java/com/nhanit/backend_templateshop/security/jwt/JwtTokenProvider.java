@@ -2,11 +2,14 @@ package com.nhanit.backend_templateshop.security.jwt;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -38,9 +41,16 @@ public class JwtTokenProvider {
 
     Date currentDate = new Date();
     Date expireDate = new Date(currentDate.getTime() + jwtExpirationDate);
+    // Lấy roles
+    List<String> roles = authentication
+        .getAuthorities()
+        .stream()
+        .map(GrantedAuthority::getAuthority)
+        .collect(Collectors.toList());
 
     return Jwts.builder()
         .setSubject(username) // Set username (ở đây là email) vào phần subject của token
+        .claim("roles", roles) // thêm roles vào claim
         .setIssuedAt(new Date()) // Thời gian phát hành
         .setExpiration(expireDate) // Thời gian hết hạn
         .signWith(key(), SignatureAlgorithm.HS256) // Ký vào token với thuật toán HS256

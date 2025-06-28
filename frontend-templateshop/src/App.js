@@ -8,6 +8,8 @@ import CartPage from './pages/CartPage';
 import OrderSuccessPage from "./pages/OrderSuccessPage";
 import ProfilePage from "./pages/ProfilePage";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import DashboardPage from "./pages/admin/DashboardPage";
+import AdminRoute from './components/auth/AdminRoute';
 function App() {
   return (
     <Routes>
@@ -22,7 +24,7 @@ function App() {
         <Route path="profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
       </Route>
       {/* Các route không có layout chung, ví dụ trang đăng nhập/đăng ký */}
-
+      <Route path="admin/dashboard" element={<AdminRoute><DashboardPage /></AdminRoute>} />
     </Routes>
   );
 }

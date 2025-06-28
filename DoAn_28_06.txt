@@ -1,0 +1,20 @@
+Công việc làm hôm nay: Xây dựng Trang quản trị (Admin Dashboard), Xây dựng Chức năng Quản lý Danh mục cho Admin
+---Xây dựng Trang quản trị (Admin Dashboard)
+	+Cập nhật AuthContext để lưu thông tin vai trò người dùng
+		1/Cài đặt thư viện giải mã JWT
+		2/Cập nhật AuthContext.js
+	+Cập nhật Backend để thêm roles vào JWT
+		1/Mở file security/jwt/JwtTokenProvider.java và thêm roles vào token.
+	+Tạo trang Admin và Bảo vệ nó
+		1/Tạo AdminRoute.js
+		2/Tạo trang Admin cơ bản
+		3/Thêm Route Admin vào App.js
+---Xây dựng Chức năng Quản lý Danh mục cho Admin
+	+Hoàn thiện categoryService.js
+		1/Mở file src/services/categoryService.js
+	+Tạo Component CategoryManager.js
+		1/Trong src/components/, tạo thư mục admin.
+		2/Trong src/components/admin/, tạo file CategoryManager.js.
+	+Tích hợp CategoryManager vào DashboardPage
+		1/Mở file src/pages/admin/DashboardPage.js.
+		2/Import và sử dụng component CategoryManager.
