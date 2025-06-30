@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getAllTemplates, deleteTemplate, updateTemplate, createTemplate } from '../../services/templateService';
 import TemplateForm from './TemplateForm';
+import { API_BASE_URL } from '../../services/api';
 
 const TemplateManager = () => {
 
@@ -99,6 +100,8 @@ const TemplateManager = () => {
     currency: 'VND',
   }).format(price);
 
+
+
   return (
     <div className="p-6 bg-white rounded-lg shadow-md mt-8">
       <div className="flex justify-between items-center mb-4">
@@ -126,31 +129,37 @@ const TemplateManager = () => {
             {isLoading ? (
               <tr><td colSpan="6" className="text-center py-4">Đang tải....</td></tr>
             ) : (
-              templates.map(template => (
-                <tr key={template.id} className="border-b">
-                  <td className="py-2 px-4">{template.id}</td>
-                  <td className="py-2 px-4">
-                    <img
-                      src={template.thumbnailUrl || 'https://placehold.co/100x60'}
-                      alt={template.name}
-                      className="w-24 h-auto object-cover rounded"
-                    />
-                  </td>
-                  <td className="py-2 px-4 font-semibold">{template.name}</td>
-                  <td className="py-2 px-4">{template.category?.name || 'N/A'}</td>
-                  <td className="py-2 px-4">{formattedPrice(template.price)}</td>
-                  <td className="py-2 px-4">
-                    <div className="flex space-x-2">
-                      <button onClick={() => openEditForm(template)} className="text-yellow-500 hover:underline">Sửa</button>
-                      <button
-                        onClick={() => handleDelete(template.id)}
-                        className="text-red-500 hover:underline"
-                      >Xóa
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
+              templates.map(template => {
+                // 2. Xây dựng URL đầy đủ cho ảnh thumbnail
+                const imageUrl = template.thumbnailUrl
+                  ? `${API_BASE_URL}/files/${template.thumbnailUrl}`
+                  : 'https://placehold.co/100x60';
+                return (
+                  <tr key={template.id} className="border-b">
+                    <td className="py-2 px-4">{template.id}</td>
+                    <td className="py-2 px-4">
+                      <img
+                        src={imageUrl}
+                        alt={template.name}
+                        className="w-24 h-auto object-cover rounded"
+                      />
+                    </td>
+                    <td className="py-2 px-4 font-semibold">{template.name}</td>
+                    <td className="py-2 px-4">{template.category?.name || 'N/A'}</td>
+                    <td className="py-2 px-4">{formattedPrice(template.price)}</td>
+                    <td className="py-2 px-4">
+                      <div className="flex space-x-2">
+                        <button onClick={() => openEditForm(template)} className="text-yellow-500 hover:underline">Sửa</button>
+                        <button
+                          onClick={() => handleDelete(template.id)}
+                          className="text-red-500 hover:underline"
+                        >Xóa
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>

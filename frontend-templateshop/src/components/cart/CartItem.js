@@ -1,9 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../contexts/CartContext';
+import { API_BASE_URL } from '../../services/api';
 
 const CartItem = ({ item }) => {
   const { updateQuantity, removeFromCart } = useCart();
+
+  // Xây dựng URL đầy đủ cho ảnh thumbnail
+  const imageUrl = item.thumbnailUrl
+    ? `${API_BASE_URL}/files/${item.thumbnailUrl}`
+    : 'https://placehold.co/100x75?text=No+Image';
 
   const formattedPrice = new Intl.NumberFormat('vi-VN', {
     style: 'currency',
@@ -12,9 +18,9 @@ const CartItem = ({ item }) => {
 
   return (
     <div className="flex items-center py-4 border-b">
-      <div className="flex items-center w-2/5">
+      <div className="flex items-center w-1/2">
         <img
-          src={item.thumbnailUrl || 'https://placehold.co/100x100?text=Img'}
+          src={imageUrl}
           alt={item.name}
           className="w-20 h-20 object-cover rounded mr-4"
         />
@@ -30,17 +36,17 @@ const CartItem = ({ item }) => {
           </button>
         </div>
       </div>
-      <div className="w-1/5 text-center">{formattedPrice}</div>
-      <div className="w-1/5 flex justify-center">
+      <div className="w-1/6 text-center">{formattedPrice}</div>
+      <div className="w-1/6 flex justify-center">
         <input
           type="number"
           value={item.quantity}
           onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
-          className="w-16 text-center border rounded"
+          className="w-16 text-center border rounded py-1"
           min="1"
         />
       </div>
-      <div className="w-1/5 text-right font-semibold">
+      <div className="w-1/6 text-right font-semibold">
         {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price * item.quantity)}
       </div>
     </div>

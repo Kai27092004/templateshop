@@ -69,10 +69,10 @@ const CartPage = () => {
       <h1 className="text-3xl font-bold mb-6"> Giỏ hàng của bạn</h1>
 
       <div className="hidden md:flex bg-gray-100 p-4 rounded-t-lg font-semibold text-gray-600">
-        <div className="w-2/5">Sản phẩm</div>
-        <div className="w-1/5">Đơn giá</div>
-        <div className="w-1/5">Số lượng</div>
-        <div className="w-1/5">Tạm tính</div>
+        <div className="w-1/2">Sản phẩm</div>
+        <div className="w-1/6 text-center">Đơn giá</div>
+        <div className="w-1/6 text-center">Số lượng</div>
+        <div className="w-1/6 text-right">Tạm tính</div>
       </div>
 
       <div>

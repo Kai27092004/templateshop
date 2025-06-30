@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getTemplateBySlug } from '../services/templateService';
 import { useCart } from '../contexts/CartContext';
+import { API_BASE_URL } from '../services/api';
 
 const ProductDetailPage = () => {
   // useParams() là một hook của React Router để lấy các tham số trên URL (ở đây là :slug)
@@ -38,7 +39,7 @@ const ProductDetailPage = () => {
   if (!template) {
     return null; // Hoặc một component thông báo không có dữ liệu
   }
-
+  const imageUrl = template.thumbnailUrl ? `${API_BASE_URL}/files/${template.thumbnailUrl}` : 'https://placehold.co/800x600?text=No+Image';
   const formattedPrice = new Intl.NumberFormat('vi-VN', {
     style: 'currency',
     currency: 'VND',
@@ -49,7 +50,7 @@ const ProductDetailPage = () => {
       <div className="grid md:grid-cols-2 gap-8">
         <div>
           <img
-            src={template.thumbnailUrl || 'https://placehold.co/800x600?text=Template'}
+            src={imageUrl}
             alt={template.name}
             className="w-full h-auto rounded-lg shadow-lg"
           />

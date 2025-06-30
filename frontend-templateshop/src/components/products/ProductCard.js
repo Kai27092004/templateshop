@@ -1,10 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useCart } from '../../contexts/CartContext';
+import { API_BASE_URL } from '../../services/api';
 
 const ProductCard = ({ template }) => {
   // Lấy hàm addToCart từ context
   const { addToCart } = useCart();
+  // 2. Xây dựng URL đầy đủ cho ảnh thumbnail
+  const imageUrl = template.thumbnailUrl ? `${API_BASE_URL}/files/${template.thumbnailUrl}` : 'https://placehold.co/600x400?text=No+Image';
   // Định dạng lại giá tiền cho dễ đọc
   const formattedPrice = new Intl.NumberFormat('vi-VN', {
     style: 'currency',
@@ -20,7 +23,7 @@ const ProductCard = ({ template }) => {
       {/* Ảnh đại diện của sản phẩm */}
       <Link to={`/templates/${template.slug}`}>
         <img
-          src={template.thumbnailUrl || 'https://placehold.co/600x400?text=Template'}
+          src={imageUrl}
           alt={template.name}
           className="w-full h-48 object-cover"
         />
