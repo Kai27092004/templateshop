@@ -136,4 +136,13 @@ public class OrderServiceImpl implements OrderService {
         .orElseThrow(() -> new ResourceNotFoundException("User", "email", userEmail));
     return orderRepository.existsByUserIdAndTemplateId(user.getId(), templateId);
   }
+
+  public void deleteOrder(Long orderId) {
+    // 1. Tìm đơn hàng theo ID
+    Order order = orderRepository.findById(orderId)
+        .orElseThrow(() -> new ResourceNotFoundException("Order", "id", orderId));
+
+    // 2. Xóa đơn hàng (các OrderDetail liên quan sẽ được xóa tự động)
+    orderRepository.delete(order);
+  }
 }

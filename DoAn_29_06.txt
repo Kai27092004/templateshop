@@ -1,0 +1,5 @@
+Công việc làm hôm nay: Quản lý Template trong Admin Dashboard
+---Quản lý Template trong Admin Dashboard
+	+Cập nhật templateService.js
+	+Tạo Component TemplateManager.js
+	+Tích hợp TemplateManager vào DashboardPage

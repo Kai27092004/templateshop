@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,8 +14,10 @@ import com.nhanit.backend_templateshop.dto.request.UpdateTemplateRequest;
 import com.nhanit.backend_templateshop.dto.response.TemplateResponse;
 import com.nhanit.backend_templateshop.entity.Category;
 import com.nhanit.backend_templateshop.entity.Template;
+import com.nhanit.backend_templateshop.exception.AppException;
 import com.nhanit.backend_templateshop.exception.ResourceNotFoundException;
 import com.nhanit.backend_templateshop.repository.CategoryRepository;
+import com.nhanit.backend_templateshop.repository.OrderDetailReposity;
 import com.nhanit.backend_templateshop.repository.TemplateRepository;
 import com.nhanit.backend_templateshop.service.FileStorageService;
 import com.nhanit.backend_templateshop.service.TemplateService;
@@ -32,6 +35,9 @@ public class TemplateServiceImpl implements TemplateService {
 
   @Autowired
   private ModelMapper modelMapper;
+
+  @Autowired
+  private OrderDetailReposity orderDetailRepository;
 
   @Override
   public TemplateResponse createTemplate(CreateTemplateRequest request, MultipartFile file) {
@@ -116,6 +122,13 @@ public class TemplateServiceImpl implements TemplateService {
 
   @Override
   public void deleteTemplate(Long templateId) {
+    // 1. Kiểm tra xem template có tồn tại trong bất kỳ chi tiết đơn hàng nào không
+    boolean isInOrder = orderDetailRepository.existsByTemplateId(templateId);
+
+    if (isInOrder) {
+      throw new AppException("Không thể xóa template này vì nó đã tồn tại trong một đơn hàng", HttpStatus.BAD_REQUEST);
+    }
+
     // 1. Tìm template cần cập nhật trong CSDL
     Template template = templateRepository.findById(templateId)
         .orElseThrow(() -> new ResourceNotFoundException("Template", "id", templateId));

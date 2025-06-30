@@ -1,5 +1,6 @@
 import React from 'react';
 import CategoryManager from '../../components/admin/CategoryManager';
+import TemplateManager from '../../components/admin/TemplateManager';
 
 const DashboardPage = () => {
   return (
@@ -9,6 +10,7 @@ const DashboardPage = () => {
 
       {/* Tích hợp component quản lý danh mục */}
       <CategoryManager />
+      <TemplateManager />
     </div>
   );
 };

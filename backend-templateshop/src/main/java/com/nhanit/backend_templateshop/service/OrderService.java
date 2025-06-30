@@ -12,4 +12,6 @@ public interface OrderService {
   List<OrderResponse> getOrdersByUserEmail(String userEmail);
 
   boolean verifyUserPurchase(String userEmail, Long templateId);
+
+  void deleteOrder(Long orderId);
 }
