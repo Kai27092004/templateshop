@@ -1,5 +1,6 @@
 package com.nhanit.backend_templateshop.service.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -25,12 +26,13 @@ import jakarta.annotation.PostConstruct;
 
 @Service
 public class FileStorageServiceImpl implements FileStorageService {
-  private final Path fileStorageLocation;
+  private final Path rootLocation;
   private static final Logger logger = LoggerFactory.getLogger(FileStorageServiceImpl.class);
 
   // Lấy đường dẫn thư mục upload từ application.properties
   public FileStorageServiceImpl(@Value("${file.upload-dir}") String uploadDir) {
-    this.fileStorageLocation = Paths.get(uploadDir).toAbsolutePath().normalize();
+    // Đường dẫn thư mục upload chính (ví dụ: ./uploads)
+    this.rootLocation = Paths.get(uploadDir).toAbsolutePath().normalize();
   }
 
   // @PostConstruct sẽ chạy một lần duy nhất ngay sau khi service này được tạo
@@ -38,31 +40,41 @@ public class FileStorageServiceImpl implements FileStorageService {
   public void init() {
     try {
       // Tạo thư mục upload nếu nó chưa tồn tại
-      Files.createDirectories(this.fileStorageLocation);
+      Files.createDirectories(this.rootLocation);
     } catch (Exception ex) {
-      throw new AppException("Không thể tạo thư mục để lưu file upload.", HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new AppException("Không thể tạo thư mục uploads.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @Override
   public String storeFile(MultipartFile file) {
-    // Lấy tên file gốc và làm sạch nó
-    String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+    return store(file, "");
+  }
 
+  @Override
+  public String storeImageFile(MultipartFile file) {
+    return store(file, "images");
+  }
+
+  private String store(MultipartFile file, String subDir) {
     try {
-      // Kiểm tra các ký tự không hợp lệ trong tên file
+      // Tạo thư mục con nếu có và nếu nó chưa tồn tại
+      Path targetDir = this.rootLocation.resolve(subDir).normalize();
+      Files.createDirectories(targetDir);
+
+      String fileName = StringUtils.cleanPath(file.getOriginalFilename());
       if (fileName.contains("..")) {
         throw new AppException("Tên file chứa ký tự không hợp lệ " + fileName, HttpStatus.BAD_REQUEST);
       }
-      // Tạo đường dẫn đầy đủ tới file
-      Path targetLocation = this.fileStorageLocation.resolve(fileName);
-      // Copy file vào thư mục đích (ghi đè nếu file đã tồn tại)
+
+      // Copy file vào thư mục đích
+      Path targetLocation = targetDir.resolve(fileName);
       Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-      return fileName;
+      // Trả về đường dẫn tương đối bao gồm cả thư mục con (nếu có)
+      return Paths.get(subDir, fileName).toString().replace("\\", "/");
     } catch (IOException ex) {
-      throw new AppException("Không thể lưu file " + fileName + ". Vui lòng thử lại!",
-          HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new AppException("Không thể lưu file. Vui lòng thử lại!", HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -74,7 +86,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     }
 
     try {
-      Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+      Path filePath = this.rootLocation.resolve(fileName).normalize();
       // Xóa file nếu nó tồn tại
       Files.deleteIfExists(filePath);
       logger.info("Đã xóa file thành công: {}", fileName);
@@ -88,7 +100,7 @@ public class FileStorageServiceImpl implements FileStorageService {
   @Override
   public Resource loadFileAsResource(String fileName) {
     try {
-      Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+      Path filePath = this.rootLocation.resolve(fileName).normalize();
       Resource resource = new UrlResource(filePath.toUri());
       if (resource.exists()) {
         return resource;

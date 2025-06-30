@@ -11,13 +11,14 @@ import com.nhanit.backend_templateshop.dto.response.TemplateResponse;
 public interface TemplateService {
 
   // Phương thức để tạo một template mới, bao gồm cả việc upload file
-  TemplateResponse createTemplate(CreateTemplateRequest request, MultipartFile file);
+  TemplateResponse createTemplate(CreateTemplateRequest request, MultipartFile file, MultipartFile thumbnail);
 
   List<TemplateResponse> getAllTemplates();
 
   TemplateResponse getTemplateById(long templateId);
 
-  TemplateResponse updateTemplate(Long templateId, UpdateTemplateRequest request, MultipartFile file);
+  TemplateResponse updateTemplate(Long templateId, UpdateTemplateRequest request, MultipartFile file,
+      MultipartFile thumbnail);
 
   void deleteTemplate(Long templateId);
 

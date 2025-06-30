@@ -51,11 +51,12 @@ public class TemplateController {
       // @RequestPart("data"): Lấy phần dữ liệu JSON có tên là "data"
       // @RequestPart("file"): Lấy phần file có tên là "file"
       @RequestPart("data") String createTemplateRequestJson,
-      @RequestPart("file") MultipartFile file) throws IOException {
+      @RequestPart("file") MultipartFile file,
+      @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail) throws IOException {
     // Dùng ObjectMapper để tự chuyển đổi chuỗi JSON thành đối tượng DTO
     CreateTemplateRequest createTemplateRequest = objectMapper.readValue(createTemplateRequestJson,
         CreateTemplateRequest.class);
-    TemplateResponse createdTemplate = templateService.createTemplate(createTemplateRequest, file);
+    TemplateResponse createdTemplate = templateService.createTemplate(createTemplateRequest, file, thumbnail);
     return new ResponseEntity<>(createdTemplate, HttpStatus.CREATED);
   }
 
@@ -66,13 +67,15 @@ public class TemplateController {
       // Nhận 'data' dưới dạng một chuỗi String
       @RequestPart("data") String updateTemplateRequestJson,
       // File không bắt buộc
-      @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
+      @RequestPart(value = "file", required = false) MultipartFile file,
+      @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail) throws IOException {
 
     // Dùng ObjectMapper để tự chuyển đổi chuỗi JSON thành đối tượng DTO
     UpdateTemplateRequest updateTemplateRequest = objectMapper.readValue(updateTemplateRequestJson,
         UpdateTemplateRequest.class);
 
-    TemplateResponse updatedTemplate = templateService.updateTemplate(templateId, updateTemplateRequest, file);
+    TemplateResponse updatedTemplate = templateService.updateTemplate(templateId, updateTemplateRequest, file,
+        thumbnail);
     return ResponseEntity.ok(updatedTemplate);
   }
 

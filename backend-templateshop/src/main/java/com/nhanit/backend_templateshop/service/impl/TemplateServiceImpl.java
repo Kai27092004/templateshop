@@ -17,7 +17,7 @@ import com.nhanit.backend_templateshop.entity.Template;
 import com.nhanit.backend_templateshop.exception.AppException;
 import com.nhanit.backend_templateshop.exception.ResourceNotFoundException;
 import com.nhanit.backend_templateshop.repository.CategoryRepository;
-import com.nhanit.backend_templateshop.repository.OrderDetailReposity;
+import com.nhanit.backend_templateshop.repository.OrderDetailRepository;
 import com.nhanit.backend_templateshop.repository.TemplateRepository;
 import com.nhanit.backend_templateshop.service.FileStorageService;
 import com.nhanit.backend_templateshop.service.TemplateService;
@@ -37,32 +37,33 @@ public class TemplateServiceImpl implements TemplateService {
   private ModelMapper modelMapper;
 
   @Autowired
-  private OrderDetailReposity orderDetailRepository;
+  private OrderDetailRepository orderDetailRepository;
 
   @Override
-  public TemplateResponse createTemplate(CreateTemplateRequest request, MultipartFile file) {
-    // 1. Tìm Category từ categoryId trong request
+  public TemplateResponse createTemplate(CreateTemplateRequest request, MultipartFile file, MultipartFile thumbnail) {
     Category category = categoryRepository.findById(request.getCategoryId())
         .orElseThrow(() -> new ResourceNotFoundException("Category", "id", request.getCategoryId()));
 
-    // 1.2. Gọi FileStorageService để lưu file và lấy lại tên file
-    String fileName = fileStorageService.storeFile(file);
+    String filePath = fileStorageService.storeFile(file);
 
-    // 2. Tạo đối tượng Template mới
+    String thumbnailRelativePath = null;
+    if (thumbnail != null && !thumbnail.isEmpty()) {
+      // SỬA LẠI: Không cộng chuỗi "images/" nữa vì storeImageFile đã trả về đường dẫn
+      // đầy đủ
+      thumbnailRelativePath = fileStorageService.storeImageFile(thumbnail);
+    }
+
     Template template = new Template();
     template.setName(request.getName());
     template.setSlug(request.getSlug());
     template.setDescription(request.getDescription());
     template.setPrice(request.getPrice());
     template.setCategory(category);
-    template.setFilePath(fileName);
+    template.setFilePath(filePath);
+    template.setThumbnailUrl(thumbnailRelativePath);
 
-    // 3. Lưu vào CSDL
     Template savedTemplate = templateRepository.save(template);
-
-    // 4. Chuyển đổi sang DTO để trả về
     return modelMapper.map(savedTemplate, TemplateResponse.class);
-
   }
 
   @Override
@@ -87,36 +88,36 @@ public class TemplateServiceImpl implements TemplateService {
   }
 
   @Override
-  public TemplateResponse updateTemplate(Long templateId, UpdateTemplateRequest request, MultipartFile file) {
-    // 1. Tìm template cần cập nhật trong CSDL
+  public TemplateResponse updateTemplate(Long templateId, UpdateTemplateRequest request, MultipartFile file,
+      MultipartFile thumbnail) {
     Template template = templateRepository.findById(templateId)
         .orElseThrow(() -> new ResourceNotFoundException("Template", "id", templateId));
 
-    // 2. Tìm category mới
     Category category = categoryRepository.findById(request.getCategoryId())
         .orElseThrow(() -> new ResourceNotFoundException("Category", "id", request.getCategoryId()));
 
-    // 3. Cập nhật các thông tin cơ bản
     template.setName(request.getName());
     template.setSlug(request.getSlug());
     template.setDescription(request.getDescription());
     template.setPrice(request.getPrice());
     template.setCategory(category);
 
-    // 4. Nếu có file mới được upload, thì cập nhật file
     if (file != null && !file.isEmpty()) {
-      // Xóa file cũ
       fileStorageService.deleteFile(template.getFilePath());
-
-      // Lưu file mới và cập nhật đường dẫn
       String newFileName = fileStorageService.storeFile(file);
       template.setFilePath(newFileName);
     }
 
-    // 5. Lưu lại template đã cập nhật vào CSDL
-    Template updatedTemplate = templateRepository.save(template);
+    if (thumbnail != null && !thumbnail.isEmpty()) {
+      if (template.getThumbnailUrl() != null) {
+        fileStorageService.deleteFile(template.getThumbnailUrl());
+      }
+      // SỬA LẠI: Không cộng chuỗi "images/" nữa
+      String newThumbnailPath = fileStorageService.storeImageFile(thumbnail);
+      template.setThumbnailUrl(newThumbnailPath);
+    }
 
-    // 6. Chuyển đổi sang DTO để trả về
+    Template updatedTemplate = templateRepository.save(template);
     return modelMapper.map(updatedTemplate, TemplateResponse.class);
   }
 
@@ -135,6 +136,9 @@ public class TemplateServiceImpl implements TemplateService {
 
     // 2. Xóa file vật lý liên quan đến template
     fileStorageService.deleteFile(template.getFilePath());
+    if (template.getThumbnailUrl() != null) {
+      fileStorageService.deleteFile(template.getThumbnailUrl());
+    }
 
     // 3. Xóa template khỏi CSDL
     templateRepository.delete(template);

@@ -68,23 +68,25 @@ public class SecurityConfig {
         })
         .csrf(csrf -> csrf.disable()) // Vô hiệu hóa CSRF vì chúng ta dùng API
         .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
-        // Cho phép tất cả các request tới /api/v1/auth/** (đăng ký, đăng nhập)
-        .authorizeHttpRequests(auth -> auth
-            // Cho phép tất cả các request với phương thức OPTIONS đi qua
-            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-            .requestMatchers("/api/v1/auth/**").permitAll()
-            // Cho phép các request GET tới /api/v1/categories/**
-            .requestMatchers("/api/v1/categories/**").permitAll()
-            // Cho phép các request GET tới /api/v1/templates/**
-            .requestMatchers("/api/v1/templates/**").permitAll()
-            // Tất cả các request còn lại đều yêu cầu phải xác thực
-            .anyRequest().authenticated())
         // Cấu hình quản lý session: không tạo session vì dùng JWT
         .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         // Liên kết AuthenticationProvider đã tạo
         .authenticationProvider(authenticationProvider())
         // Chạy jwtAuthFilter trước bộ lọc UsernamePasswordAuthenticationFilter mặc định
-        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+        // Cho phép tất cả các request tới /api/v1/auth/** (đăng ký, đăng nhập)
+        // .authorizeHttpRequests(auth -> auth
+        // // Cho phép tất cả các request với phương thức OPTIONS đi qua
+        // .requestMatchers("/api/v1/files/**").permitAll()
+        // .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+        // .requestMatchers("/api/v1/auth/**").permitAll()
+        // // Cho phép các request GET tới /api/v1/categories/**
+        // .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
+        // // Cho phép các request GET tới /api/v1/templates/**
+        // .requestMatchers(HttpMethod.GET, "/api/v1/templates/**").permitAll()
+        // // Tất cả các request còn lại đều yêu cầu phải xác thực
+        // .anyRequest().authenticated());
+        .authorizeHttpRequests(auth -> auth.requestMatchers("/**").permitAll());
     return http.build();
   }
 
