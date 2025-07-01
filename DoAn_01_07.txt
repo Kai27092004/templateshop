@@ -1,0 +1,15 @@
+Công việc làm hôm nay:Xây dựng API Quản lý Người dùng, Xây dựng Giao diện Quản lý Người dùng
+---Xây dựng API Quản lý Người dùng
+	1/ Tạo các DTO (Data Transfer Objects) cần thiết
+		+Tạo UserResponse.java
+		+Tạo AdminCreateUserRequest.java
+	2/Mở rộng UserService và UserServiceImpl
+		+Cập nhật Interface UserService.java
+	3/Tạo AdminController mới
+	4/Cập nhật SecurityConfig
+---Xây dựng Giao diện Quản lý Người dùng
+	1/Hoàn thiện userService.js
+	2/Tạo Component UserManager.js
+		+Trong thư mục src/components/admin/, tạo file UserManager.js.
+	3/Tích hợp UserManager vào DashboardPage
+	
