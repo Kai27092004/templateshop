@@ -13,6 +13,7 @@ const TemplateForm = ({ initialData, onSubmit, onCancel }) => {
     description: '',
     price: '',
     categoryId: '',
+    liveDemoUrl: '',
   });
 
   const [thumbnailFile, setThumbnailFile] = useState(null);
@@ -36,9 +37,10 @@ const TemplateForm = ({ initialData, onSubmit, onCancel }) => {
         description: initialData.description || '',
         price: initialData.price || '',
         categoryId: initialData.category?.id || '',
+        liveDemoUrl: initialData.liveDemoUrl || '',
       });
     } else {
-      setFormData({ id: null, name: '', slug: '', description: '', price: '', categoryId: '' });
+      setFormData({ id: null, name: '', slug: '', description: '', price: '', categoryId: '', liveDemoUrl: '' });
     }
   }, [initialData]);
 
@@ -66,11 +68,12 @@ const TemplateForm = ({ initialData, onSubmit, onCancel }) => {
         <h2 className="text-2xl font-bold mb-4">
           {initialData ? 'Chỉnh sửa Template' : 'Thêm Template mới'}
         </h2>
-        <form onSubmit={handleSubmit} className="sapce-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <input name='name' value={formData.name} onChange={handleInputChange} placeholder='Tên Template' required className="w-full p-2 border rounded" />
           <input name='slug' value={formData.slug} onChange={handleInputChange} placeholder='Slug' required className="w-full p-2 border rounded" />
           <textarea name='description' value={formData.description} onChange={handleInputChange} placeholder="Mô tả" className="w-full p-2 border rounded" />
           <input type='number' name='price' value={formData.price} onChange={handleInputChange} placeholder='Giá' required className="w-full p-2 border rounded" />
+          <input type="text" name="liveDemoUrl" value={formData.liveDemoUrl} onChange={handleInputChange} placeholder="URL của trang Live Demo" className="w-full p-2 border rounded" />
           <select name='categoryId' value={formData.categoryId} onChange={handleInputChange} required className="w-full p-2 border rounded">
             <option value="">-- Chọn Danh mục --</option>
             {categories.map(cat => (
@@ -82,7 +85,7 @@ const TemplateForm = ({ initialData, onSubmit, onCancel }) => {
             <input type='file' onChange={handleThumbnailChange} className="w-full p-2 border rounded" />
           </div>
           <div>
-            <labe className="block text-sm font-medium text-gray-700">File Template (.zip)</labe>
+            <label className="block text-sm font-medium text-gray-700">File Template (.zip)</label>
             <input type='file' onChange={handleFileChange} required={!initialData} className="w-full p-2 border rounded" />
           </div>
           <div className="flex justify-end space-x-4">

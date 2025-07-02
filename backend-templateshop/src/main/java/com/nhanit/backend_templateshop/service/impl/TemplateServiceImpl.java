@@ -61,6 +61,7 @@ public class TemplateServiceImpl implements TemplateService {
     template.setCategory(category);
     template.setFilePath(filePath);
     template.setThumbnailUrl(thumbnailRelativePath);
+    template.setLiveDemoUrl(request.getLiveDemoUrl());
 
     Template savedTemplate = templateRepository.save(template);
     return modelMapper.map(savedTemplate, TemplateResponse.class);
@@ -116,7 +117,7 @@ public class TemplateServiceImpl implements TemplateService {
       String newThumbnailPath = fileStorageService.storeImageFile(thumbnail);
       template.setThumbnailUrl(newThumbnailPath);
     }
-
+    template.setLiveDemoUrl(request.getLiveDemoUrl());
     Template updatedTemplate = templateRepository.save(template);
     return modelMapper.map(updatedTemplate, TemplateResponse.class);
   }

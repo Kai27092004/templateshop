@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,11 +34,12 @@ public class OrderController {
     return ResponseEntity.ok("Đã tạo đơn hàng thành công với ID: " + createdOrder.getId());
   }
 
-  @DeleteMapping("/{id}")
-  @PreAuthorize("hasRole('ADMIN')") // Bảo vệ riêng phương thức này cho ADMIN
-  public ResponseEntity<String> deleteOrder(@PathVariable("id") Long orderId) {
-    orderService.deleteOrder(orderId);
-    return ResponseEntity.ok("Đã xóa đơn hàng thành công.");
+  @PostMapping("/{id}/confirm-payment")
+  @PreAuthorize("isAuthenticated()")
+  public ResponseEntity<String> confirmPayment(@PathVariable("id") Long orderId, Authentication authentication) {
+    String userEmail = authentication.getName();
+    orderService.confirmOrderPayment(orderId, userEmail);
+    return ResponseEntity.ok("Đã xác nhận thanh toán cho đơn hàng thành công.");
   }
 
 }

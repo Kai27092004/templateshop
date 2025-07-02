@@ -10,6 +10,7 @@ import ProfilePage from "./pages/ProfilePage";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import DashboardPage from "./pages/admin/DashboardPage";
 import AdminRoute from './components/auth/AdminRoute';
+import PaymentPage from "./pages/PaymentPage";
 function App() {
   return (
     <Routes>
@@ -22,6 +23,7 @@ function App() {
         <Route path="cart" element={<CartPage />} />
         <Route path="order-success" element={<OrderSuccessPage />} />
         <Route path="profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+        <Route path="/payment/:orderId" element={<ProtectedRoute><PaymentPage /></ProtectedRoute>} />
       </Route>
       {/* Các route không có layout chung, ví dụ trang đăng nhập/đăng ký */}
       <Route path="admin/dashboard" element={<AdminRoute><DashboardPage /></AdminRoute>} />

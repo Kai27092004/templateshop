@@ -12,4 +12,5 @@ public class OrderResponse {
   private Long totalAmount;
   private String status;
   private List<OrderDetailResponse> orderDetails;
+  private UserProfileResponse user;
 }

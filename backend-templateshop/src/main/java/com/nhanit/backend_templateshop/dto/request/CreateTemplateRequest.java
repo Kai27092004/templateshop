@@ -22,4 +22,6 @@ public class CreateTemplateRequest {
   @NotNull(message = "ID danh mục không được để trống")
   private Long categoryId;
 
+  private String liveDemoUrl;
+
 }

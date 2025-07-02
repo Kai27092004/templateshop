@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,10 +15,14 @@ import com.nhanit.backend_templateshop.dto.response.CategoryResponse;
 import com.nhanit.backend_templateshop.dto.response.OrderDetailResponse;
 import com.nhanit.backend_templateshop.dto.response.OrderResponse;
 import com.nhanit.backend_templateshop.dto.response.TemplateResponse;
+import com.nhanit.backend_templateshop.dto.response.UserProfileResponse;
+import com.nhanit.backend_templateshop.dto.response.UserResponse;
 import com.nhanit.backend_templateshop.entity.Order;
 import com.nhanit.backend_templateshop.entity.OrderDetail;
+import com.nhanit.backend_templateshop.entity.OrderStatus;
 import com.nhanit.backend_templateshop.entity.Template;
 import com.nhanit.backend_templateshop.entity.User;
+import com.nhanit.backend_templateshop.exception.AppException;
 import com.nhanit.backend_templateshop.exception.ResourceNotFoundException;
 import com.nhanit.backend_templateshop.repository.OrderRepository;
 import com.nhanit.backend_templateshop.repository.TemplateRepository;
@@ -45,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
     // 2. Tạo một đối tượng Order mới
     Order order = new Order();
     order.setUser(user);
-    order.setStatus("PENDING");
+    order.setStatus(OrderStatus.PENDING);
 
     long totalAmount = 0;
     List<OrderDetail> orderDetails = new ArrayList<>();
@@ -97,7 +102,12 @@ public class OrderServiceImpl implements OrderService {
     orderResponse.setId(order.getId());
     orderResponse.setOrderDate(order.getOrderDate());
     orderResponse.setTotalAmount(order.getTotalAmount());
-    orderResponse.setStatus(order.getStatus());
+    orderResponse.setStatus(order.getStatus().getDisplayName());
+
+    if (order.getUser() != null) {
+      UserProfileResponse userProfile = modelMapper.map(order.getUser(), UserProfileResponse.class);
+      orderResponse.setUser(userProfile);
+    }
 
     List<OrderDetailResponse> detailResponses = order.getOrderDetails().stream()
         .map(detail -> {
@@ -131,12 +141,14 @@ public class OrderServiceImpl implements OrderService {
     return orderResponse;
   }
 
+  @Override
   public boolean verifyUserPurchase(String userEmail, Long templateId) {
     User user = userRepository.findByEmail(userEmail)
         .orElseThrow(() -> new ResourceNotFoundException("User", "email", userEmail));
-    return orderRepository.existsByUserIdAndTemplateId(user.getId(), templateId);
+    return orderRepository.existsByUserIdAndTemplateId(user.getId(), templateId, OrderStatus.COMPLETED);
   }
 
+  @Override
   public void deleteOrder(Long orderId) {
     // 1. Tìm đơn hàng theo ID
     Order order = orderRepository.findById(orderId)
@@ -144,5 +156,37 @@ public class OrderServiceImpl implements OrderService {
 
     // 2. Xóa đơn hàng (các OrderDetail liên quan sẽ được xóa tự động)
     orderRepository.delete(order);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<OrderResponse> getAllOrders() {
+    List<Order> orders = orderRepository.findAllWithDetails();
+    return orders
+        .stream()
+        .map(this::mapToOrderResponse)
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  @Transactional
+  public Order confirmOrderPayment(Long orderId, String userEmail) {
+    // 1. Tìm đơn hàng theo ID
+    Order order = orderRepository.findById(orderId)
+        .orElseThrow(() -> new ResourceNotFoundException("Order", "id", orderId));
+
+    // 2. Kiểm tra xem người dùng này có đúng là chủ của đơn hàng không
+    if (!order.getUser().getEmail().equals(userEmail)) {
+      throw new AppException("Bạn không có quyền xác nhận thanh toán cho đơn hàng này", HttpStatus.FORBIDDEN);
+    }
+
+    // 3. Kiểm tra xem đơn hàng có đang ở trạng thái "PENDING" không
+    if (order.getStatus() != OrderStatus.PENDING) {
+      throw new AppException("Chỉ có thể xác nhận thanh toán cho các đơn hàng đang chờ.", HttpStatus.BAD_REQUEST);
+    }
+
+    // 4. Cập nhật trạng thái và lưu lại
+    order.setStatus(OrderStatus.COMPLETED);
+    return orderRepository.save(order);
   }
 }

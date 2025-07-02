@@ -41,6 +41,7 @@ const TemplateManager = () => {
       description: data.description,
       price: data.price,
       categoryId: data.categoryId,
+      liveDemoUrl: data.liveDemoUrl,
     };
     formData.append('data', JSON.stringify(templateData));
 

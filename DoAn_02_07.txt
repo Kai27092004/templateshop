@@ -1,0 +1,32 @@
+Công việc làm hôm nay:Xây dựng API Quản lý Đơn hàng cho Admin, Xây dựng Giao diện Quản lý Đơn hàng, Hoàn thiện Chức năng Live Demo,Tích hợp quy trình Thanh toán (Giả lập)
+---Xây dựng API Quản lý Đơn hàng cho Admin
+	1/Cập nhật OrderRepository
+	2/Cập nhật OrderService và OrderServiceImpl
+		+Cập nhật Interface OrderService.java
+		+Cập nhật lớp triển khai OrderServiceImpl.java
+		+Cập nhật OrderResponse để chứa thông tin User
+		+Cập nhật lại hàm mapToOrderResponse
+	3/Cập nhật AdminOrderController
+---Xây dựng Giao diện Quản lý Đơn hàng
+	1/Cập nhật orderService.js
+	2/Tạo Component OrderManager.js
+	3/Tích hợp OrderManager vào DashboardPage
+---Hoàn thiện Chức năng Live Demo
+	1/Cập nhật Backend
+		+Cập nhật các DTO Request
+		+Cập nhật TemplateServiceImpl.java
+	2/Cập nhật Frontend
+		+Cập nhật TemplateForm.js
+		+Cập nhật ProductCard.js và ProductDetailPage.js
+---Tích hợp quy trình Thanh toán (Giả lập)
+	1/Cập nhật Logic tạo và xác thực Đơn hàng
+		+Cập nhật OrderServiceImpl.createOrder
+		+Cập nhật OrderRepository để kiểm tra trạng thái đơn hàng
+	2/Xây dựng API để Xác nhận Thanh toán
+		+Cập nhật OrderService
+		+Cập nhật OrderServiceImpl
+		+Cập nhật OrderController
+---Hoàn thiện Luồng Thanh toán ở Frontend
+	1/Cập nhật orderService.js
+	2/Tạo Trang PaymentPage.js (Trang giả lập thanh toán)
+	3/Cập nhật CartPage.js

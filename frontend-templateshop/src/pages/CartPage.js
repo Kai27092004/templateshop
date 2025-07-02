@@ -7,7 +7,7 @@ import CartItem from '../components/cart/CartItem';
 
 const CartPage = () => {
 
-  const { cartItems, cartTotal, clearCart } = useCart();
+  const { cartItems, cartTotal } = useCart();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -28,18 +28,14 @@ const CartPage = () => {
       })),
     };
     try {
-      // 3. Gọi API tạo đơn hàng
+      // Gọi API tạo đơn hàng
       const response = await createOrder(orderData);
-
-      // 4. Xử lý khi thành công
-      clearCart();
-
       // Lấy ID đơn hàng từ response để hiển thị
       const orderIdMessage = response.data;
       const orderId = orderIdMessage.split(': ')[1];
 
       // Điều hướng đến trang thành công và truyền theo orderId
-      navigate('/order-success', { state: { orderId: orderId } });
+      navigate(`/payment/${orderId}`);
     } catch (err) {
       console.error("Checkout error: ", err);
       setError("Đã có lỗi xảy ra khi đặt hàng. Vui lòng thử lại.");

@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS orders
     user_id				BIGINT				NOT NULL,
     order_date			TIMESTAMP			DEFAULT CURRENT_TIMESTAMP,
     total_amount		BIGINT				NOT NULL,
-    status				VARCHAR(20)			NOT NULL DEFAULT 'Pending', -- Đang xử lý, Thành công, Thất bại
+    status				VARCHAR(20)			NOT NULL DEFAULT 'PENDING', -- Đang xử lý, Thành công, Thất bại
     FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
@@ -96,4 +96,6 @@ INSERT INTO templates (name, slug, description, price, category_id, thumbnail_ur
 
 -- USE template_shop_db;
 -- ALTER TABLE templates ADD COLUMN updated_at TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP AFTER created_at;
+
+
 
