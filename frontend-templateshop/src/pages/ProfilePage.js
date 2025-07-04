@@ -53,6 +53,8 @@ const ProfilePage = () => {
   if (loading) return <div className="text-center mt-10">Đang tải trang hồ sơ...</div>;
   if (error) return <div className="text-center mt-10 text-red-500">{error}</div>;
 
+
+
   return (
     <div className="container mx-auto p-4">
       {/* Phần thông tin cá nhân */}
@@ -72,26 +74,42 @@ const ProfilePage = () => {
         <h2 className="text-2xl font-semibold mb-4">Các sản phẩm đã mua</h2>
         {orders.length > 0 ? (
           <div className="space-y-6">
-            {orders.map(order => (
-              <div key={order.id} className="border-t pt-4">
-                <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-lg font-bold">Đơn hàng #{order.id}</h3>
-                  <span className="text-sm text-gray-500">{new Date(order.orderDate).toLocaleString('vi-VN')}</span>
-                </div>
-                {order.orderDetails.map(detail => (
-                  <div key={detail.template.id} className="flex justify-between items-center py-2 border-b">
-                    <span>{detail.template.name}</span>
-                    <button
-                      // SỬA LẠI 2: Dùng template literal `` thay vì chuỗi ''
-                      onClick={() => handleDownload(detail.template.id, `${detail.template.slug}.zip`)}
-                      className="bg-green-500 text-white py-1 px-3 rounded text-sm hover:bg-green-600 transition-colors"
-                    >
-                      Tải xuống
-                    </button>
+            {orders.map(order => {
+              const isCompleted = order.status === 'Đã thanh toán';
+              const statusColor = isCompleted
+                ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
+              return (
+                <div key={order.id} className="border rounded-lg p-4">
+                  <div className="flex justify-between items-center mb-2 flex-wrap gap-2">
+                    <h3 className="text-lg font-bold">Đơn hàng #{order.id}</h3>
+                    {/* Hiển thị trạng thái với màu sắc */}
+                    <span className={`px-3 py-1 text-sm font-semibold rounded-full ${statusColor}`}>
+                      {order.status}
+                    </span>
+                    <span className="text-sm text-gray-500">{new Date(order.orderDate).toLocaleString('vi-VN')}</span>
                   </div>
-                ))}
-              </div>
-            ))}
+                  <div className="border-t pt-2 mt-2">
+                    {order.orderDetails.map(detail => (
+                      <div key={detail.template.id} className="flex justify-between items-center py-2 border-b last:border-b-0">
+                        <span>{detail.template.name} x {detail.quantity}</span>
+                        {/* Chỉ hiển thị nút tải xuống nếu đơn hàng đã hoàn thành */}
+                        {isCompleted && (
+                          <button
+                            onClick={() => handleDownload(detail.template.id, `${detail.template.slug}.zip`)}
+                            className="bg-green-500 text-white py-1 px-3 rounded text-sm hover:bg-green-600 transition-colors"
+                          >
+                            Tải xuống
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex justify-end font-bold text-lg mt-2 border-t pt-2">
+                    <span>Tổng cộng: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(order.totalAmount)}</span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         ) : (
           <p>Bạn chưa mua sản phẩm nào.</p>
