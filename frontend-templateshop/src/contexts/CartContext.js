@@ -1,27 +1,34 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-
-// Hàm trợ giúp để lấy giỏ hàng từ localStorage
-const getInitialCart = () => {
-  try {
-    const savedCart = localStorage.getItem('cart');
-    return savedCart ? JSON.parse(savedCart) : [];
-  } catch (error) {
-    console.error("Failed to parse cart from localStorage", error);
-    return [];
-  }
-};
+import { useAuth } from './AuthContext';
 
 // 1. Tạo Context
 const CartContext = createContext();
 
 // 2. Tạo Provider Component
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState(getInitialCart);
+  const { user } = useAuth();
+  const [cartItems, setCartItems] = useState([]);
 
-  // Mỗi khi cartItems thay đổi, lưu nó vào localStorage
+  // Tạo key duy nhất cho giỏ hàng dựa trên email của user
+  // Nếu chưa đăng nhập, dùng key 'cart_guest';
+  const cartKey = user ? `cart_${user.email}` : 'cart_guest';
+
+  // useEffect này sẽ chạy mỗi khi user thay đổi (đăng nhập/đăng xuất)
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cartItems));
-  }, [cartItems]);
+    const savedCart = localStorage.getItem(cartKey);
+    setCartItems(savedCart ? JSON.parse(savedCart) : []);
+  }, [user, cartKey]);
+
+  // useEffect này sẽ chạy mỗi khi cartItems thay đổi để lưu vào localStorage
+  useEffect(() => {
+    // Chỉ lưu nếu có sản phẩm, tránh lưu mảng rỗng không cần thiết
+    if (cartItems.length > 0) {
+      localStorage.setItem(cartKey, JSON.stringify(cartItems));
+    } else {
+      // Nếu giỏ hàng rỗng, xóa key khỏi localStorage
+      localStorage.removeItem(cartKey);
+    }
+  }, [cartItems, cartKey]);
 
   // Hàm thêm sản phẩm vào giỏ hàng
   const addToCart = (product) => {

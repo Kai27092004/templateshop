@@ -11,7 +11,7 @@ const AdminRoute = ({ children }) => {
 
   if (!isAuthenticated || !isAdmin) {
     // Nếu không đăng nhập hoặc không phải admin, đá về trang chủ
-    return <Navigate to="/" replace />;
+    return <Navigate to="/admin/login" replace />;
   }
 
   return children;

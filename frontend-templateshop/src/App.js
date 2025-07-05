@@ -11,6 +11,7 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import DashboardPage from "./pages/admin/DashboardPage";
 import AdminRoute from './components/auth/AdminRoute';
 import PaymentPage from "./pages/PaymentPage";
+import AdminLoginPage from "./pages/admin/AdminLoginPage";
 function App() {
   return (
     <Routes>
@@ -26,7 +27,9 @@ function App() {
         <Route path="/payment/:orderId" element={<ProtectedRoute><PaymentPage /></ProtectedRoute>} />
       </Route>
       {/* Các route không có layout chung, ví dụ trang đăng nhập/đăng ký */}
+
       <Route path="admin/dashboard" element={<AdminRoute><DashboardPage /></AdminRoute>} />
+      <Route path="admin/login" element={<AdminLoginPage />} />
     </Routes>
   );
 }

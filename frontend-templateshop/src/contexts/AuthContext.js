@@ -36,11 +36,17 @@ export const AuthProvider = ({ children }) => {
   const login = (newToken) => {
     try {
       const decodedToken = jwtDecode(newToken);
+      const userPayload = { email: decodedToken.sub, roles: decodedToken.roles || [] };
+
       localStorage.setItem('token', newToken);
       setToken(newToken);
-      setUser({ email: decodedToken.sub, roles: decodedToken.roles || [] });
+      setUser(userPayload);
+
+      return userPayload; // Trả về thông tin user để nơi gọi có thể dùng ngay
     } catch (error) {
       console.error("Failed to decode token on login", error);
+      logout(); // Nếu token lỗi, dọn dẹp state
+      return null;
     }
   };
 

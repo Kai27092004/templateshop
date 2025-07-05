@@ -1,11 +1,15 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom'; // Thêm useNavigate, useLocation
 import { useCart } from '../../contexts/CartContext';
+import { useAuth } from '../../contexts/AuthContext'; // Thêm useAuth
 import { API_BASE_URL } from '../../services/api';
 
 const ProductCard = ({ template }) => {
   // Lấy hàm addToCart từ context
   const { addToCart } = useCart();
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
   // 2. Xây dựng URL đầy đủ cho ảnh thumbnail
   const imageUrl = template.thumbnailUrl ? `${API_BASE_URL}/files/${template.thumbnailUrl}` : 'https://placehold.co/600x400?text=No+Image';
   // Định dạng lại giá tiền cho dễ đọc
@@ -15,7 +19,15 @@ const ProductCard = ({ template }) => {
   }).format(template.price);
   //Hàm xử lý khi click vào nút
   const handleAddToCart = () => {
-    addToCart(template);
+    if (isAuthenticated) {
+      // Nếu đã đăng nhập, thêm vào giỏ hàng như bình thường
+      addToCart(template);
+    } else {
+      // Nếu chưa đăng nhập, chuyển hướng đến trang đăng nhập
+      // Lưu lại trang hiện tại để quay lại sau khi đăng nhập thành công
+      alert('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.');
+      navigate('/login', { state: { from: location } });
+    }
   };
 
   return (
