@@ -1,0 +1,8 @@
+Công việc làm hôm nay: Nâng cấp Xác thực Admin và Đồng bộ Giỏ hàng
+---Tạo trang Đăng nhập riêng cho Admin
+	1/Tạo AdminLoginPage.js
+	2/Cập nhật AuthContext.js để hỗ trợ kiểm tra vai trò
+	3/Cập nhật AdminRoute.js để chuyển hướng đúng
+---Sửa lỗi Giỏ hàng dùng chung
+	1/Tái cấu trúc lại CartContext.js
+	2/Cập nhật App.js
