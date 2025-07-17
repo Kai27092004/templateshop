@@ -1,22 +1,96 @@
-import React from 'react';
-import CategoryManager from '../../components/admin/CategoryManager';
-import TemplateManager from '../../components/admin/TemplateManager';
-import UserManager from '../../components/admin/UserManager';
-import OrderManager from '../../components/admin/OrderManager';
-import DashboardStats from '../../components/admin/DashboardStats';
+import React, { useState, useEffect } from "react";
+import { getDashboardStats, getRevenueChartData, getOrdersChartData } from '../../services/dashboardService';
+import { UserGroupIcon, ShoppingBagIcon, ClipboardDocumentListIcon, CurrencyDollarIcon } from "@heroicons/react/24/outline";
+import RevenueChart from "../../components/ui/RevenueChart";
+import OrdersChart from "../../components/ui/OrdersChart";
 
 const DashboardPage = () => {
-  return (
-    <div>
-      <h1 className="text-3xl font-bold">Trang Quản trị</h1>
-      <p className="mt-4">Chào mừng Admin! Đây là nơi bạn sẽ quản lý toàn bộ trang web.</p>
+  const [stats, setStats] = useState(null);
+  const [year, setYear] = useState(new Date().getFullYear()); // Mặc định là năm hiện tại
+  const [revenueData, setRevenueData] = useState([]);
+  const [ordersData, setOrdersData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-      {/* Tích hợp component quản lý danh mục */}
-      <DashboardStats />
-      <OrderManager />
-      <CategoryManager />
-      <TemplateManager />
-      <UserManager />
+  useEffect(() => {
+    const fetchAllData = async () => {
+      setLoading(true);
+      try {
+        const [statsRes, revenueRes, ordersRes] = await Promise.all([
+          getDashboardStats(),
+          getRevenueChartData(year),
+          getOrdersChartData(year)
+        ]);
+        setStats(statsRes.data);
+        setRevenueData(revenueRes.data);
+        setOrdersData(ordersRes.data);
+        setError('');
+      } catch (err) {
+        console.error("Failed to fetch dashboard data:", err);
+        setError("Không thể tải dữ liệu. Vui lòng thử lại.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAllData();
+  }, [year]); // Chạy lại khi 'year' thay đổi
+
+  const handleYearChange = (e) => {
+    const newYear = parseInt(e.target.value);
+    if (!isNaN(newYear)) {
+      setYear(newYear);
+    }
+  };
+
+  const formattedPrice = (price) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+
+  const statCards = [
+    { name: "Doanh Thu", value: formattedPrice(stats?.totalRevenue || 0), icon: CurrencyDollarIcon, color: "bg-purple-500" },
+    { name: "Tổng Người Dùng", value: stats?.totalUsers || 0, icon: UserGroupIcon, color: "bg-green-500" },
+    { name: "Tổng Sản Phẩm", value: stats?.totalTemplates || 0, icon: ShoppingBagIcon, color: "bg-blue-500" },
+    { name: "Tổng Đơn Hàng", value: stats?.totalOrders || 0, icon: ClipboardDocumentListIcon, color: "bg-yellow-500" },
+  ];
+
+  return (
+    <div className="p-6 space-y-6">
+      {/* Welcome Section */}
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-lg text-white p-6">
+        <h1 className="text-3xl font-bold">Chào mừng trở lại, Admin!</h1>
+        <p className="text-blue-100 mt-2">Đây là tổng quan hệ thống của bạn.</p>
+      </div>
+
+      {/* Statistics Cards */}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {statCards.map((stat) => (
+          <div key={stat.name} className="bg-white overflow-hidden shadow-lg rounded-lg hover:shadow-xl transition-shadow duration-300">
+            <div className="p-5 flex items-center">
+              <div className={`${stat.color} p-3 rounded-md`}><stat.icon className="h-6 w-6 text-white" /></div>
+              <div className="ml-5 flex-1"><dl><dt className="text-sm font-medium text-gray-500 truncate">{stat.name}</dt><dd className="text-2xl font-semibold text-gray-900">{stat.value}</dd></dl></div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Year Filter Section */}
+      <div className="bg-white p-4 rounded-lg shadow flex items-center gap-4 w-1/2 mx-auto">
+        <label htmlFor="yearFilter" className="text-md font-semibold text-gray-700">Chọn năm để xem thống kê:</label>
+        <input
+          type="number"
+          id="yearFilter"
+          value={year}
+          onChange={handleYearChange}
+          className="border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+          placeholder="YYYY"
+        />
+        {loading && <div className="text-sm text-blue-500">Đang tải...</div>}
+      </div>
+      {error && <div className="p-4 text-red-500 bg-red-100 rounded-md">{error}</div>}
+
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <RevenueChart data={revenueData} />
+        <OrdersChart data={ordersData} />
+      </div>
     </div>
   );
 };

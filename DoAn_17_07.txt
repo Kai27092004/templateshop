@@ -1,0 +1,15 @@
+Công việc làm hôm nay:Tích hợp giao diện AdminLayout, Dashboard, Cập nhật lại backend để thống kê theo tháng
+1/ Tạo AdminLayout
+2/ Tạo Dasboard:
+	+ Thêm SimpleChart
+	+ Kết nối API và Hiển thị Dữ liệu Thật trên DashboardPage
+3/ Cập nhật Backend
+	+ OrderRepository
+	+ Cập nhật DashboardService.java
+	+ Cập nhật DashboardServiceImpl.java
+	+ Cập nhật DashboardController.java
+4/ Cập nhật Frontend
+	+ Cập nhật dashboardService.js
+	+ Tạo các Component Biểu đồ Mới: RevenueChart.js và OrdersChart.js
+	+ Cập nhật DashboardPage.js
+	

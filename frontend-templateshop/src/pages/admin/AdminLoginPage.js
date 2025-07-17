@@ -26,7 +26,7 @@ const AdminLoginPage = () => {
       // Kiểm tra vai trò từ kết quả trả về của hàm login
       if (userPayload && userPayload.roles.includes('ROLE_ADMIN')) {
         // Nếu là admin, chuyển hướng đến dashboard
-        navigate('/admin/dashboard');
+        navigate('/admin');
       } else {
         // Nếu không phải admin, báo lỗi và đăng xuất ngay lập tức
         setError('Tài khoản của bạn không có quyền quản trị.');

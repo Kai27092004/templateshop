@@ -12,6 +12,7 @@ import DashboardPage from "./pages/admin/DashboardPage";
 import AdminRoute from './components/auth/AdminRoute';
 import PaymentPage from "./pages/PaymentPage";
 import AdminLoginPage from "./pages/admin/AdminLoginPage";
+import AdminLayout from "./components/layout/AdminLayout";
 function App() {
   return (
     <Routes>
@@ -26,10 +27,16 @@ function App() {
         <Route path="profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
         <Route path="/payment/:orderId" element={<ProtectedRoute><PaymentPage /></ProtectedRoute>} />
       </Route>
-      {/* Các route không có layout chung, ví dụ trang đăng nhập/đăng ký */}
 
-      <Route path="admin/dashboard" element={<AdminRoute><DashboardPage /></AdminRoute>} />
+      {/* Các route không có layout chung, ví dụ trang đăng nhập/đăng ký */}
       <Route path="admin/login" element={<AdminLoginPage />} />
+
+      {/* Các route Admin */}
+      <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
+        <Route index element={<DashboardPage />} />
+      </Route>
+
+
     </Routes>
   );
 }

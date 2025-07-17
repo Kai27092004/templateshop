@@ -40,4 +40,20 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
         @Query("SELECT SUM(o.totalAmount) FROM Order o WHERE o.status = 'COMPLETED'")
         Long getTotalRevenue();
+
+        // Lọc doanh thu theo tháng của một năm cụ thể
+        @Query("SELECT FUNCTION('MONTH', o.orderDate) as month, SUM(o.totalAmount) as total " +
+                        "FROM Order o " +
+                        "WHERE o.status = 'COMPLETED' AND FUNCTION('YEAR', o.orderDate) = :year " +
+                        "GROUP BY month " +
+                        "ORDER BY month")
+        List<Object[]> findRevenueByMonthInYear(@Param("year") int year);
+
+        // Lọc số lượng đơn hàng theo tháng của một năm cụ thể
+        @Query("SELECT FUNCTION('MONTH', o.orderDate) as month, COUNT(o.id) as count " +
+                        "FROM Order o " +
+                        "WHERE o.status = 'COMPLETED' AND FUNCTION('YEAR', o.orderDate) = :year " +
+                        "GROUP BY month " +
+                        "ORDER BY month")
+        List<Object[]> countOrdersByMonthInYear(@Param("year") int year);
 }

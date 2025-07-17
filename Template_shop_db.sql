@@ -18,6 +18,9 @@ CREATE TABLE IF NOT EXISTS users
     role				VARCHAR(20)		    NOT NULL DEFAULT 'USER', -- Mặc định là 'Người dùng', có thể là 'Quản trị viên'
     created_at			TIMESTAMP			DEFAULT CURRENT_TIMESTAMP
 );
+-- SET FOREIGN_KEY_CHECKS = 0;
+-- TRUNCATE TABLE users;
+-- SET FOREIGN_KEY_CHECKS = 1;
 
 -- Bảng categories
 CREATE TABLE IF NOT EXISTS categories
@@ -85,7 +88,8 @@ INSERT INTO `categories` (`id`, `name`, `slug`) VALUES
 
 -- =================================================================
 -- 2. TẠO 1 ADMIN VÀ 9 NGƯỜI DÙNG
--- Mật khẩu cho tất cả đều là 'password123' đã được mã hóa
+-- Mật khẩu cho Admin là 'admin123' đã được mã hóa
+-- Mật khẩu cho User là 'user123' đã được mã hóa
 -- =================================================================
 INSERT INTO `users` (`id`, `full_name`, `email`, `password`, `role`, `created_at`) VALUES
 (1, 'Quản Trị Viên Chính', 'admin@email.com', '$2a$10$o2Vpobr8u4IK3J9c1bK3LOR3KPHVUkdhOpwYKUijMAj22w7AFoujq', 'ADMIN', NOW()),
