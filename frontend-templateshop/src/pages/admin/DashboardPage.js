@@ -52,42 +52,49 @@ const DashboardPage = () => {
   ];
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       {/* Welcome Section */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-lg text-white p-6">
-        <h1 className="text-3xl font-bold">Chào mừng trở lại, Admin!</h1>
-        <p className="text-blue-100 mt-2">Đây là tổng quan hệ thống của bạn.</p>
+        <h1 className="text-2xl sm:text-3xl font-bold">Chào mừng trở lại, Admin!</h1>
+        <p className="text-blue-100 mt-2 text-sm sm:text-base">Đây là tổng quan hệ thống của bạn.</p>
       </div>
 
       {/* Statistics Cards */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {statCards.map((stat) => (
-          <div key={stat.name} className="bg-white overflow-hidden shadow-lg rounded-lg hover:shadow-xl transition-shadow duration-300">
+          <div key={stat.name} className="bg-white overflow-hidden shadow-lg rounded-lg">
             <div className="p-5 flex items-center">
-              <div className={`${stat.color} p-3 rounded-md`}><stat.icon className="h-6 w-6 text-white" /></div>
-              <div className="ml-5 flex-1"><dl><dt className="text-sm font-medium text-gray-500 truncate">{stat.name}</dt><dd className="text-2xl font-semibold text-gray-900">{stat.value}</dd></dl></div>
+              <div className={`${stat.color} p-3 rounded-md`}>
+                <stat.icon className="h-6 w-6 text-white" />
+              </div>
+              <div className="ml-4 flex-1">
+                <dl>
+                  <dt className="text-sm font-medium text-gray-500 truncate">{stat.name}</dt>
+                  <dd className="text-xl sm:text-2xl font-semibold text-gray-900">{stat.value}</dd>
+                </dl>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
       {/* Year Filter Section */}
-      <div className="bg-white p-4 rounded-lg shadow flex items-center gap-4 w-1/2 mx-auto">
-        <label htmlFor="yearFilter" className="text-md font-semibold text-gray-700">Chọn năm để xem thống kê:</label>
+      <div className="bg-white p-4 rounded-lg shadow flex flex-col sm:flex-row items-center justify-center gap-4">
+        <label htmlFor="yearFilter" className="text-sm sm:text-base font-semibold text-gray-700">Xem thống kê theo năm:</label>
         <input
           type="number"
           id="yearFilter"
           value={year}
           onChange={handleYearChange}
-          className="border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+          className="border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-sm"
           placeholder="YYYY"
         />
-        {loading && <div className="text-sm text-blue-500">Đang tải...</div>}
+        {loading && <div className="text-sm text-blue-500 animate-pulse">Đang tải...</div>}
       </div>
-      {error && <div className="p-4 text-red-500 bg-red-100 rounded-md">{error}</div>}
+      {error && <div className="p-4 text-center text-red-500 bg-red-100 rounded-md">{error}</div>}
 
       {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <RevenueChart data={revenueData} />
         <OrdersChart data={ordersData} />
       </div>

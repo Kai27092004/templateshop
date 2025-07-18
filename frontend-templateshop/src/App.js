@@ -13,6 +13,7 @@ import AdminRoute from './components/auth/AdminRoute';
 import PaymentPage from "./pages/PaymentPage";
 import AdminLoginPage from "./pages/admin/AdminLoginPage";
 import AdminLayout from "./components/layout/AdminLayout";
+import OrderManager from "./components/admin/OrderManager";
 function App() {
   return (
     <Routes>
@@ -34,6 +35,7 @@ function App() {
       {/* Các route Admin */}
       <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
         <Route index element={<DashboardPage />} />
+        <Route path="orders" element={<OrderManager />} />
       </Route>
 
 
