@@ -41,10 +41,10 @@ const AdminLayout = () => {
       current: location.pathname === "/admin/categories",
     },
     {
-      name: "Quản Lý Sản Phẩm",
-      href: "/admin/products",
+      name: "Quản Lý Templates",
+      href: "/admin/templates",
       icon: ShoppingBagIcon,
-      current: location.pathname === "/admin/products",
+      current: location.pathname === "/admin/templates",
     },
     {
       name: "Quản Lý Người Dùng",

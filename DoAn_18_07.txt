@@ -1,4 +1,4 @@
-Công việc làm hôm nay: Quản lý đơn hàng
+Công việc làm hôm nay: Hoàn thành trang Quản lý đơn hàng
 1/ Cập nhật Component
 	+ Thêm các UI mặc định: ConfirmModal, Toastsuccess, Pagination
 	+ Thêm các bộ lọc

@@ -42,11 +42,19 @@ public class CategoryServiceImpl implements CategoryService {
 
   @Override
   public List<CategoryResponse> getAllCategories() {
-    List<Category> categories = categoryRepository.findAll();
-    // Dùng stream để chuyển đổi một List<Category> thành List<CategoryResponse>
-    return categories.stream()
-        .map(category -> modelMapper.map(category, CategoryResponse.class))
+    return categoryRepository.findAll().stream()
+        .map(this::mapToCategoryResponse)
         .collect(Collectors.toList());
+  }
+
+
+  private CategoryResponse mapToCategoryResponse(Category category) {
+    return CategoryResponse.builder()
+        .id(category.getId())
+        .name(category.getName())
+        .slug(category.getSlug())
+        .productCount(category.getTemplates() != null ? category.getTemplates().size() : 0) // Tính số sản phẩm
+        .build();
   }
 
   @Override

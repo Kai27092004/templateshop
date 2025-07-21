@@ -1,0 +1,14 @@
+Công việc làm hôm nay: Quản lý danh mục, Quản lý sản phẩm (chưa xong)
+--- Quản lý danh mục
+1/ Kết nối API và Hoàn thiện CategoriesPage.js
+2/ Cập nhật App.js để Sử dụng Trang Mới
+3/ Thêm phần hiển thị số lượng sản phẩm cho từng danh mục
+	+ Cập nhật Backend
+		- Category.java
+		- CategoryResponse.java
+		- CategoryServiceImpl.java
+		- CategoryController.java
+
+--- Quản lý sản phẩm
+1/ Kết nối API và hoàn thiện ProductsPage.js
+2/ Cập nhật App.js để Sử dụng Trang Mới

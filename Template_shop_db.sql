@@ -180,6 +180,6 @@ CALL CreateRandomOrders();
 -- Xóa procedure sau khi đã dùng xong
 DROP PROCEDURE CreateRandomOrders;
 
-DROP TABLE IF EXISTS order_details;
+-- DROP TABLE IF EXISTS order_details;
 
 

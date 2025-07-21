@@ -14,6 +14,8 @@ import PaymentPage from "./pages/PaymentPage";
 import AdminLoginPage from "./pages/admin/AdminLoginPage";
 import AdminLayout from "./components/layout/AdminLayout";
 import OrderManager from "./components/admin/OrderManager";
+import CategoryManager from "./components/admin/CategoryManager";
+import TemplateManger from "./components/admin/TemplateManager";
 function App() {
   return (
     <Routes>
@@ -36,6 +38,8 @@ function App() {
       <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
         <Route index element={<DashboardPage />} />
         <Route path="orders" element={<OrderManager />} />
+        <Route path="categories" element={<CategoryManager />} />
+        <Route path="templates" element={<TemplateManger />} />
       </Route>
 
 
