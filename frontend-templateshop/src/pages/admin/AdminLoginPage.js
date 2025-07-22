@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { loginUser } from '../../services/authService';
+import GradientButton from "../../components/ui/GradientButton";
 
 const AdminLoginPage = () => {
   const navigate = useNavigate();
@@ -38,46 +39,41 @@ const AdminLoginPage = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-blue-100">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
-        <h2 className="text-3xl font-bold text-center text-gray-900">Đăng Nhập</h2>
-        {/* Form đăng nhập */}
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="email" className="text-sm font-medium text-gray-700">Email</label>
-            <input
-              type="email"
+    <div class="bg-sky-100 flex justify-center items-center h-screen">
+      <div class="w-1/2 h-screen hidden lg:block">
+        <img src="https://img.freepik.com/fotos-premium/imagen-fondo_910766-187.jpg?w=826" alt="Placeholder Image" class="object-cover w-full h-full" />
+      </div>
+      <div class="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
+        <h1 class="text-2xl font-semibold mb-4">Đăng Nhập</h1>
+        <form onSubmit={handleSubmit}>
+          <div class="mb-4 bg-sky-100">
+            <label for="username" class="block text-gray-600">Email</label>
+            <input type="email"
               name="email"
               id="email"
               required
               className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               value={formData.email}
-              onChange={handleChange}
-            />
+              onChange={handleChange} />
           </div>
-          <div>
-            <label htmlFor="password" className="text-sm font-medium text-gray-700">Password</label>
-            <input
-              type="password"
+          <div class="mb-4">
+            <label for="password" class="block text-gray-800">Password</label>
+            <input type="password"
               name="password"
               id="password"
               required
               minLength="6"
               className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               value={formData.password}
-              onChange={handleChange}
-            />
+              onChange={handleChange} />
           </div>
           {/* Hiển thị thông báo lỗi */}
           {error && <p className="text-sm text-red-600">{error}</p>}
-          <div>
-            <button
-              type="submit"
-              className="w-full px-4 py-2 font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              Đăng nhập
-            </button>
-          </div>
+          <button type="submit">
+            <GradientButton>
+              Đăng Nhập
+            </GradientButton>
+          </button>
         </form>
       </div>
     </div>

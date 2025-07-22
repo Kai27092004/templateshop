@@ -14,6 +14,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import Footer from "./Footer";
 
 
 const AdminLayout = () => {
@@ -174,6 +175,7 @@ const AdminLayout = () => {
         <main className="flex-1 overflow-y-auto bg-gray-50">
           <Outlet />
         </main>
+        <Footer />
       </div>
     </div>
   );

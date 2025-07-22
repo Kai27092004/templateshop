@@ -13,6 +13,8 @@ import com.nhanit.backend_templateshop.dto.request.AdminCreateUserRequest;
 import com.nhanit.backend_templateshop.dto.request.AdminUpdateUserRequest;
 import com.nhanit.backend_templateshop.dto.response.UserProfileResponse;
 import com.nhanit.backend_templateshop.dto.response.UserResponse;
+import com.nhanit.backend_templateshop.entity.Order;
+import com.nhanit.backend_templateshop.entity.OrderStatus;
 import com.nhanit.backend_templateshop.entity.User;
 import com.nhanit.backend_templateshop.exception.AppException;
 import com.nhanit.backend_templateshop.exception.ResourceNotFoundException;
@@ -40,10 +42,21 @@ public class UserServiceImpl implements UserService {
   @Override
   public List<UserResponse> getAllUsers() {
     List<User> users = userRepository.findAll();
-    return users
-        .stream()
-        .map(user -> modelMapper.map(user, UserResponse.class))
-        .collect(Collectors.toList());
+    return users.stream().map(user -> {
+      UserResponse userResponse = modelMapper.map(user, UserResponse.class);
+
+      // Tính toán thống kê đơn hàng cho mỗi user
+      List<Order> orders = user.getOrders();
+      userResponse.setOrderCount(orders.size());
+
+      long totalSpent = orders.stream()
+          .filter(order -> order.getStatus() == OrderStatus.COMPLETED)
+          .mapToLong(Order::getTotalAmount)
+          .sum();
+      userResponse.setTotalSpent(totalSpent);
+
+      return userResponse;
+    }).collect(Collectors.toList());
   }
 
   @Override

@@ -16,6 +16,7 @@ import AdminLayout from "./components/layout/AdminLayout";
 import OrderManager from "./components/admin/OrderManager";
 import CategoryManager from "./components/admin/CategoryManager";
 import TemplateManger from "./components/admin/TemplateManager";
+import UserManager from "./components/admin/UserManager";
 function App() {
   return (
     <Routes>
@@ -40,6 +41,7 @@ function App() {
         <Route path="orders" element={<OrderManager />} />
         <Route path="categories" element={<CategoryManager />} />
         <Route path="templates" element={<TemplateManger />} />
+        <Route path="users" element={<UserManager />} />
       </Route>
 
 

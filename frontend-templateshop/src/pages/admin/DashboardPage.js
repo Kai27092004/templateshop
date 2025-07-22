@@ -62,7 +62,7 @@ const DashboardPage = () => {
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {statCards.map((stat) => (
-          <div key={stat.name} className="bg-white overflow-hidden shadow-lg rounded-lg">
+          <div key={stat.name} className="bg-white overflow-hidden shadow-lg rounded-lg hover:shadow-xl transition-shadow duration-300">
             <div className="p-5 flex items-center">
               <div className={`${stat.color} p-3 rounded-md`}>
                 <stat.icon className="h-6 w-6 text-white" />

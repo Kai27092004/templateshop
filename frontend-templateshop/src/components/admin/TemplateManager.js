@@ -35,7 +35,8 @@ const TemplateManager = () => {
         getAllTemplates(),
         getAllCategories()
       ]);
-      setProducts(productsRes.data);
+      const sortedProducts = productsRes.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      setProducts(sortedProducts);
       setCategories(categoriesRes.data);
       setError('');
     } catch (err) {
