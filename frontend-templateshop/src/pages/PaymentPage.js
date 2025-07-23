@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { confirmOrderPayment } from '../services/orderService';
 import { useCart } from '../contexts/CartContext';
+import api from '../services/api';
 
 const PaymentPage = () => {
   const { orderId } = useParams();
@@ -9,6 +10,21 @@ const PaymentPage = () => {
   const { clearCart } = useCart();
   const [isConfirming, setIsConfirming] = useState(false);
   const [error, setError] = useState('');
+  const [totalAmount, setTotalAmount] = useState(null);
+
+  React.useEffect(() => {
+    // Lấy chi tiết đơn hàng để lấy tổng tiền
+    const fetchOrderDetail = async () => {
+      try {
+        const res = await api.get(`/account/orders`); // Lấy tất cả đơn hàng của user
+        const found = res.data.find(o => String(o.id) === String(orderId));
+        if (found) setTotalAmount(found.totalAmount);
+      } catch (e) {
+        setTotalAmount(null);
+      }
+    };
+    fetchOrderDetail();
+  }, [orderId]);
 
   const handleConfirmPayment = async () => {
     setIsConfirming(true);
@@ -30,6 +46,9 @@ const PaymentPage = () => {
       <div className="w-full max-w-lg p-8 space-y-6 bg-white rounded-lg shadow-md text-center">
         <h2 className="text-3xl font-bold text-gray-900">Xác nhận Thanh toán</h2>
         <p className="text-gray-600">Đơn hàng của bạn đã được tạo với ID: <span className="font-bold">#{orderId}</span>.</p>
+        {totalAmount !== null && (
+          <p className="text-xl text-black font-bold mb-2">Tổng tiền hóa đơn cần thanh toán là: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalAmount)}</p>
+        )}
         <p className="text-gray-600">Vui lòng hoàn tất thanh toán (giả lập) và nhấn nút xác nhận bên dưới.</p>
 
         <div className="flex justify-center">

@@ -17,16 +17,24 @@ import OrderManager from "./components/admin/OrderManager";
 import CategoryManager from "./components/admin/CategoryManager";
 import TemplateManger from "./components/admin/TemplateManager";
 import UserManager from "./components/admin/UserManager";
+import AboutPage from "./pages/AboutPage";
+import NewsPage from "./pages/NewsPage";
+import ContactPage from "./pages/ContactPage";
+import Product from "./pages/Products";
 function App() {
   return (
     <Routes>
       {/* Tất cả các route bên trong MainLayout sẽ có Navbar và Footer */}
       <Route path="/" element={<MainLayout />}>
         <Route index element={<HomePage />} />
+        <Route path="ve-chung-toi" element={<AboutPage />} />
+        <Route path="tin-tuc" element={<NewsPage />} />
+        <Route path="lien-he" element={<ContactPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPgae />} />
         <Route path="templates/:slug" element={<ProductDetailPage />} />
-        <Route path="cart" element={<CartPage />} />
+        <Route path="gio-hang" element={<CartPage />} />
+        <Route path="san-pham" element={<Product />} />
         <Route path="order-success" element={<OrderSuccessPage />} />
         <Route path="profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
         <Route path="/payment/:orderId" element={<ProtectedRoute><PaymentPage /></ProtectedRoute>} />

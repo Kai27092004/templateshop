@@ -1,0 +1,1 @@
+Công việc làm hôm nay:Tích hợp giao diện header, footer, những trang tĩnh, giỏ hàng, đăng ký, đăng nhập, lịch sử đơn hàng (chưa xong)

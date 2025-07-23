@@ -15,3 +15,7 @@ export const deleteOrderAdmin = (orderId) => {
 export const confirmOrderPayment = (orderId) => {
   return api.post(`/orders/${orderId}/confirm-payment`);
 };
+
+export const cancelOrder = (orderId) => {
+  return api.post(`/orders/${orderId}/cancel`);
+};

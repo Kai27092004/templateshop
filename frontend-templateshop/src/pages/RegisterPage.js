@@ -50,17 +50,18 @@ const RegisterPage = () => {
     }
   };
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
-        <h2 className="text-3xl font-bold text-center text-gray-900">Đăng ký tài khoản</h2>
+    <div className="min-h-screen bg-[#eaf3f7] py-10 flex items-center justify-center">
+      <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
+        <h1 className="text-2xl sm:text-3xl font-bold text-[#7c3aed] mb-6 text-center">Đăng ký miễn phí</h1>
         {/* Form đăng ký */}
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label htmlFor="fullName" className="text-sm font-medium text-gray-700">Họ và tên</label>
+            <label htmlFor="fullName" className="block text-gray-700 font-medium mb-1">Họ và tên</label>
             <input
               type="text"
               name="fullName"
               id="fullName"
+              placeholder="Nhập họ tên"
               required
               className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               value={formData.fullName}
@@ -68,11 +69,12 @@ const RegisterPage = () => {
             />
           </div>
           <div>
-            <label htmlFor="email" className="text-sm font-medium text-gray-700">Email</label>
+            <label htmlFor="email" className="block text-gray-700 font-medium mb-1">Email</label>
             <input
               type="email"
               name="email"
               id="email"
+              placeholder="Nhập email"
               required
               className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               value={formData.email}
@@ -80,11 +82,12 @@ const RegisterPage = () => {
             />
           </div>
           <div>
-            <label htmlFor="password" className="text-sm font-medium text-gray-700">Password</label>
+            <label htmlFor="password" className="block text-gray-700 font-medium mb-1">Password</label>
             <input
               type="password"
               name="password"
               id="password"
+              placeholder="Nhập mật khẩu"
               required
               minLength="6"
               className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
@@ -98,15 +101,15 @@ const RegisterPage = () => {
           <div>
             <button
               type="submit"
-              className="w-full px-4 py-2 font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="w-full py-3 rounded-lg bg-gradient-to-r from-[#7c3aed] to-[#38bdf8] text-white font-semibold shadow hover:from-[#6d28d9] hover:to-[#0ea5e9] transition text-lg mt-2"
             >
               Đăng ký
             </button>
           </div>
         </form>
-        <p className="text-sm text-center text-gray-600">
+        <p className="text-center text-sm text-gray-500 mt-6">
           Đã có tài khoản {' '}
-          <Link to="/login" className="font-medium text-blue-600 hover:underline">
+          <Link to="/login" className="text-[#7c3aed] font-medium hover:underline">
             Đăng nhập ngay
           </Link>
         </p>
