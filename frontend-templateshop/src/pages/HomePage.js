@@ -1,6 +1,76 @@
-import { motion } from "framer-motion"; // eslint-disable-line no-unused-vars
+import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import GradientButton from "../components/ui/GradientButton";
+import { getAllCategories } from "../services/categoryService"; // Import service để lấy danh mục
+
+// Helper component cho các thẻ icon danh mục
+const CategoryIconCard = ({ category, icon, color, variants }) => (
+	<motion.div
+		className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col h-full"
+		variants={variants}
+		whileHover={{
+			y: -10,
+			transition: { duration: 0.3 },
+		}}
+	>
+		<div className={`w-16 h-16 bg-gradient-to-r ${color} rounded-2xl flex items-center justify-center text-2xl mb-6`}>
+			{icon}
+		</div>
+		<h3 className="text-xl font-bold text-gray-800 mb-4">
+			{category.name}
+		</h3>
+		<p className="text-gray-600 leading-relaxed mb-4 line-clamp-3">
+			{/* Nếu có description thì dùng, không thì tạo mô tả mặc định */}
+			{category.description || `Khám phá các mẫu template tuyệt vời thuộc danh mục ${category.name}.`}
+		</p>
+		<div className="mt-auto">
+			<Link to="/san-pham" state={{ category: category }}>
+				<motion.button
+					className={`w-full py-3 px-4 bg-gradient-to-r ${color} text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300`}
+					whileHover={{ scale: 1.02 }}
+					whileTap={{ scale: 0.98 }}
+				>
+					Xem mẫu
+				</motion.button>
+			</Link>
+		</div>
+	</motion.div>
+);
+
+// Helper component cho các thẻ ảnh danh mục
+const CategoryImageCard = ({ category, imageUrl, variants }) => (
+	<motion.div
+		className="group relative overflow-hidden rounded-2xl shadow-lg"
+		variants={variants}
+		whileHover={{ scale: 1.05 }}
+		transition={{ duration: 0.3 }}
+	>
+		<img
+			src={imageUrl}
+			alt={category.name}
+			className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+		/>
+		<div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent">
+			<div className="absolute bottom-4 left-4 text-white">
+				<h4 className="text-lg font-semibold">{category.name}</h4>
+				<p className="text-sm opacity-90 mb-2">
+					{category.productCount} sản phẩm
+				</p>
+				<Link to="/san-pham" state={{ category: category }}>
+					<motion.button
+						className="bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-white/30 transition-all duration-300"
+						whileHover={{ scale: 1.05 }}
+						whileTap={{ scale: 0.95 }}
+					>
+						Khám phá
+					</motion.button>
+				</Link>
+			</div>
+		</div>
+	</motion.div>
+);
+
 
 const HomePage = () => {
 	const [stats, setStats] = useState({
@@ -9,15 +79,15 @@ const HomePage = () => {
 		templates: 0,
 		satisfaction: 0,
 	});
+	// State để lưu danh sách danh mục
+	const [categories, setCategories] = useState([]);
 
 	// Animation variants
 	const containerVariants = {
 		hidden: { opacity: 0 },
 		visible: {
 			opacity: 1,
-			transition: {
-				staggerChildren: 0.3,
-			},
+			transition: { staggerChildren: 0.2 },
 		},
 	};
 
@@ -26,10 +96,7 @@ const HomePage = () => {
 		visible: {
 			opacity: 1,
 			y: 0,
-			transition: {
-				duration: 0.6,
-				ease: "easeOut",
-			},
+			transition: { duration: 0.6, ease: "easeOut" },
 		},
 	};
 
@@ -44,6 +111,22 @@ const HomePage = () => {
 			},
 		},
 	};
+
+	// Mảng icon và màu sắc tương ứng, có thể mở rộng
+	const categoryStyles = [
+		{ icon: "💄", color: "from-pink-500 to-rose-500" },
+		{ icon: "🍽️", color: "from-orange-500 to-red-500" },
+		{ icon: "✈️", color: "from-blue-500 to-cyan-500" },
+		{ icon: "🎨", color: "from-purple-500 to-indigo-500" },
+	];
+
+	// Mảng ảnh tương ứng cho portfolio
+	const portfolioImages = [
+		"https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=300&fit=crop",
+		"https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&h=300&fit=crop",
+		"https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=300&fit=crop",
+		"https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=300&fit=crop"
+	];
 
 	// Counter animation effect
 	useEffect(() => {
@@ -81,38 +164,18 @@ const HomePage = () => {
 		return () => intervals.forEach(clearInterval);
 	}, []);
 
-	const portfolioImages = [
-		{
-			url: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=300&fit=crop",
-			title: "Landing Page Mỹ Phẩm",
-			category: "Mỹ phẩm",
-		},
-		{
-			url: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&h=300&fit=crop",
-			title: "Landing Page Nhà Hàng",
-			category: "Nhà hàng",
-		},
-		{
-			url: "https://images.unsplash.com/photo-1539650116574-75c0c6d7ffbf?w=400&h=300&fit=crop",
-			title: "Landing Page Du Lịch",
-			category: "Du lịch",
-		},
-		{
-			url: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=300&fit=crop",
-			title: "Landing Page Portfolio",
-			category: "Portfolio",
-		},
-		{
-			url: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop",
-			title: "Landing Page Spa & Wellness",
-			category: "Mỹ phẩm",
-		},
-		{
-			url: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=300&fit=crop",
-			title: "Landing Page Café",
-			category: "Nhà hàng",
-		},
-	];
+	useEffect(() => {
+		const fetchCategories = async () => {
+			try {
+				const response = await getAllCategories();
+				setCategories(response.data);
+			} catch (error) {
+				console.error("Failed to fetch categories:", error);
+			}
+		};
+		fetchCategories();
+	}, []);
+
 
 	return (
 		<div className="min-h-screen bg-white">
@@ -170,7 +233,7 @@ const HomePage = () => {
 								whileTap={{ scale: 0.95 }}
 							>
 								<GradientButton className="px-8 py-4 text-lg font-semibold rounded-full">
-									Mua Landing Page →
+									<a href="/san-pham">Mua Landing Page →</a>
 								</GradientButton>
 							</motion.div>
 
@@ -179,7 +242,7 @@ const HomePage = () => {
 								whileHover={{ scale: 1.05 }}
 								whileTap={{ scale: 0.95 }}
 							>
-								Xem mẫu demo
+								<a href="/san-pham">Xem mẫu demo</a>
 							</motion.button>
 						</motion.div>
 					</motion.div>
@@ -213,7 +276,7 @@ const HomePage = () => {
 				</div>
 			</motion.section>
 
-			{/* Services Section */}
+			{/* Services Section - Đã cập nhật */}
 			<motion.section
 				className="py-20 bg-gray-50"
 				initial="hidden"
@@ -233,79 +296,21 @@ const HomePage = () => {
 					</motion.div>
 
 					<div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-						{[
-							{
-								title: "Mỹ Phẩm",
-								description:
-									"Landing page cho thương hiệu mỹ phẩm với thiết kế sang trọng, showcase sản phẩm đẹp mắt",
-								icon: "💄",
-								color: "from-pink-500 to-rose-500",
-								price: "2,500,000 VNĐ",
-							},
-							{
-								title: "Nhà Hàng",
-								description:
-									"Landing page cho nhà hàng với menu trực tuyến, đặt bàn và giới thiệu không gian",
-								icon: "🍽️",
-								color: "from-orange-500 to-red-500",
-								price: "2,200,000 VNĐ",
-							},
-							{
-								title: "Du Lịch",
-								description:
-									"Landing page cho tour du lịch với gallery hình ảnh đẹp và form đặt tour",
-								icon: "✈️",
-								color: "from-blue-500 to-cyan-500",
-								price: "2,800,000 VNĐ",
-							},
-							{
-								title: "Portfolio",
-								description:
-									"Landing page cá nhân để showcase dự án, kỹ năng và kinh nghiệm làm việc",
-								icon: "🎨",
-								color: "from-purple-500 to-indigo-500",
-								price: "2,000,000 VNĐ",
-							},
-						].map((service, index) => (
-							<motion.div
-								key={index}
-								className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col h-full"
+						{/* Lấy 4 danh mục đầu tiên để hiển thị */}
+						{categories.slice(0, 4).map((category, index) => (
+							<CategoryIconCard
+								key={category.id}
+								category={category}
+								icon={categoryStyles[index % categoryStyles.length].icon}
+								color={categoryStyles[index % categoryStyles.length].color}
 								variants={itemVariants}
-								whileHover={{
-									y: -10,
-									transition: { duration: 0.3 },
-								}}
-							>
-								<div
-									className={`w-16 h-16 bg-gradient-to-r ${service.color} rounded-2xl flex items-center justify-center text-2xl mb-6`}
-								>
-									{service.icon}
-								</div>
-								<h3 className="text-xl font-bold text-gray-800 mb-4">
-									{service.title}
-								</h3>
-								<p className="text-gray-600 leading-relaxed mb-4">
-									{service.description}
-								</p>
-								<div className="mt-auto">
-									<div className="text-2xl font-bold text-purple-600 mb-4">
-										{service.price}
-									</div>
-									<motion.button
-										className={`w-full py-3 px-4 bg-gradient-to-r ${service.color} text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300`}
-										whileHover={{ scale: 1.02 }}
-										whileTap={{ scale: 0.98 }}
-									>
-										Xem Demo
-									</motion.button>
-								</div>
-							</motion.div>
+							/>
 						))}
 					</div>
 				</div>
 			</motion.section>
 
-			{/* Portfolio Section */}
+			{/* Portfolio Section - Đã cập nhật */}
 			<motion.section
 				className="py-20 bg-white"
 				initial="hidden"
@@ -316,44 +321,22 @@ const HomePage = () => {
 				<div className="container mx-auto px-6">
 					<motion.div className="text-center mb-16" variants={itemVariants}>
 						<h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
-							Mẫu Landing Page Của Chúng Tôi
+							Khám phá Các Mẫu Nổi Bật
 						</h2>
 						<p className="text-xl text-gray-600 max-w-3xl mx-auto">
-							Xem trước các mẫu landing page chuyên nghiệp cho từng ngành nghề.
-							Thiết kế đẹp mắt, tối ưu chuyển đổi
+							Xem trước các mẫu landing page chuyên nghiệp. Thiết kế đẹp mắt, tối ưu chuyển đổi.
 						</p>
 					</motion.div>
 
 					<div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-						{portfolioImages.map((portfolio, index) => (
-							<motion.div
-								key={index}
-								className="group relative overflow-hidden rounded-2xl shadow-lg"
+						{/* Lấy 6 danh mục đầu tiên để hiển thị */}
+						{categories.slice(0, 6).map((category, index) => (
+							<CategoryImageCard
+								key={category.id}
+								category={category}
+								imageUrl={portfolioImages[index % portfolioImages.length]}
 								variants={itemVariants}
-								whileHover={{ scale: 1.05 }}
-								transition={{ duration: 0.3 }}
-							>
-								<img
-									src={portfolio.url}
-									alt={portfolio.title}
-									className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
-								/>
-								<div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-									<div className="absolute bottom-4 left-4 text-white">
-										<h4 className="text-lg font-semibold">{portfolio.title}</h4>
-										<p className="text-sm opacity-90 mb-2">
-											{portfolio.category}
-										</p>
-										<motion.button
-											className="bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-white/30 transition-all duration-300"
-											whileHover={{ scale: 1.05 }}
-											whileTap={{ scale: 0.95 }}
-										>
-											Xem Demo
-										</motion.button>
-									</div>
-								</div>
-							</motion.div>
+							/>
 						))}
 					</div>
 				</div>
@@ -445,7 +428,7 @@ const HomePage = () => {
 					>
 						<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
 							<GradientButton className="px-8 py-4 text-lg font-semibold rounded-full">
-								Mua Ngay
+								<a href="/san-pham">Mua ngay</a>
 							</GradientButton>
 						</motion.div>
 						<motion.button
@@ -453,7 +436,7 @@ const HomePage = () => {
 							whileHover={{ scale: 1.05 }}
 							whileTap={{ scale: 0.95 }}
 						>
-							Tư vấn miễn phí
+							<a href="/lien-he">Tư vấn miễn phí</a>
 						</motion.button>
 					</motion.div>
 				</div>

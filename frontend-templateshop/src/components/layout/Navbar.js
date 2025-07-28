@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useCart } from '../../contexts/CartContext';
 import { IoChevronDown } from "react-icons/io5";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import GradientButton from "../ui/GradientButton";
+import { getAllCategories } from '../../services/categoryService';
 
 const Navbar = () => {
   // Lấy trạng thái và hàm logout
@@ -15,6 +16,21 @@ const Navbar = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+
+  const [categories, setCategories] = useState([]); // State để lưu danh sách danh mục
+
+  // Lấy danh sách danh mục từ API khi component được tải
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await getAllCategories();
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
 
 
   useEffect(() => {
@@ -34,16 +50,21 @@ const Navbar = () => {
       : "text-gray-700 hover:text-[#7c3aed] hover:bg-[#f3e8ff] font-medium px-3 lg:px-4 py-2 rounded-full transition-colors duration-200 text-sm lg:text-base";
   };
 
-  const handleDropdownEnter = (dropdown) => {
-    setActiveDropdown(dropdown);
-  };
-
-  const handleDropdownLeave = () => {
-    setActiveDropdown(null);
-  };
-
-  const dropdownLinkStyles =
-    "block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#f3e8ff] hover:text-[#7c3aed]";
+  const dropdownLink = (category) => (
+    <Link
+      key={category.id}
+      to="/san-pham"
+      // Dùng state để truyền slug của danh mục qua trang sản phẩm
+      state={{ category: category }}
+      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#f3e8ff] hover:text-[#7c3aed]"
+      onClick={() => {
+        setActiveDropdown(null);
+        setIsMenuOpen(false);
+      }}
+    >
+      {category.name}
+    </Link>
+  );
   // Chuyển về trang đăng nhập sau khi logout
   const handleLogout = () => {
     logout();
@@ -59,12 +80,12 @@ const Navbar = () => {
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center space-x-2 xl:space-x-6 text-sm flex-1 justify-center">
           {/* Dropdown cho Desktop */}
-          <div className="relative" onMouseLeave={handleDropdownLeave}>
+          <div className="relative" onMouseLeave={() => setActiveDropdown(null)}>
             <button
-              onMouseEnter={() => handleDropdownEnter("landing-page")}
+              onMouseEnter={() => setActiveDropdown("landing-page")}
               className="flex items-center space-x-1 text-gray-700 hover:text-[#7c3aed] text-sm lg:text-base px-3 lg:px-4 py-2"
             >
-              <NavLink to="/san-pham"><span>Mẫu Landing Page</span></NavLink>
+              <NavLink to="/san-pham" className={navLinkStyles}><span>Mẫu Landing Page</span></NavLink>
               <IoChevronDown
                 size={14}
                 className={`transition-transform ${activeDropdown === "landing-page" ? "rotate-180" : ""
@@ -73,18 +94,7 @@ const Navbar = () => {
             </button>
             {activeDropdown === "landing-page" && (
               <div className="absolute top-full left-1/2 -translate-x-1/2 w-48 bg-white border border-gray-100 rounded-lg shadow-xl py-2 z-50">
-                <NavLink to="/my-pham" className={dropdownLinkStyles}>
-                  Mỹ Phẩm
-                </NavLink>
-                <NavLink to="/nha-hang" className={dropdownLinkStyles}>
-                  Nhà Hàng
-                </NavLink>
-                <NavLink to="/du-lich" className={dropdownLinkStyles}>
-                  Du Lịch
-                </NavLink>
-                <NavLink to="/portfolio" className={dropdownLinkStyles}>
-                  Portfolio
-                </NavLink>
+                {categories.map(cat => dropdownLink(cat))}
               </div>
             )}
           </div>
@@ -179,34 +189,7 @@ const Navbar = () => {
                   Mẫu Landing Page
                 </p>
                 <div className="pl-4 space-y-2">
-                  <NavLink
-                    to="/my-pham"
-                    className="block text-gray-700 hover:text-[#7c3aed] font-medium text-sm py-1"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Mỹ Phẩm
-                  </NavLink>
-                  <NavLink
-                    to="/nha-hang"
-                    className="block text-gray-700 hover:text-[#7c3aed] font-medium text-sm py-1"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Nhà Hàng
-                  </NavLink>
-                  <NavLink
-                    to="/du-lich"
-                    className="block text-gray-700 hover:text-[#7c3aed] font-medium text-sm py-1"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Du Lịch
-                  </NavLink>
-                  <NavLink
-                    to="/portfolio"
-                    className="block text-gray-700 hover:text-[#7c3aed] font-medium text-sm py-1"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Portfolio
-                  </NavLink>
+                  {categories.map(cat => dropdownLink(cat))}
                 </div>
               </div>
               <NavLink

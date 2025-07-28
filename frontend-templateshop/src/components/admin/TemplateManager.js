@@ -73,7 +73,7 @@ const TemplateManager = () => {
   const generateSlug = (name) => name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[đĐ]/g, "d").replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-").trim("-");
 
   const handleFormChange = (e) => {
-    const { name, value, type, files } = e.target;
+    const { name, value, files } = e.target;
     const val = files ? files[0] : value;
 
     setEditingProduct(prev => {

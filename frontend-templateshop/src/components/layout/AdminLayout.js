@@ -14,7 +14,6 @@ import {
 } from "@heroicons/react/24/outline";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
-import Footer from "./Footer";
 
 
 const AdminLayout = () => {
@@ -175,7 +174,13 @@ const AdminLayout = () => {
         <main className="flex-1 overflow-y-auto bg-gray-50">
           <Outlet />
         </main>
-        <Footer />
+        <footer>
+          <div className="bg-[#E7D2F9] py-3 sm:py-4">
+            <div className="container mx-auto px-4 text-center text-gray-600 text-xs sm:text-sm">
+              © 2025 SHOPNK. All rights reserved.
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
   );

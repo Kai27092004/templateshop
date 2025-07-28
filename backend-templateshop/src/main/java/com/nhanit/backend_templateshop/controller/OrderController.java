@@ -42,4 +42,12 @@ public class OrderController {
     return ResponseEntity.ok("Đã xác nhận thanh toán cho đơn hàng thành công.");
   }
 
+  @PostMapping("/{id}/cancel")
+  @PreAuthorize("isAuthenticated()")
+  public ResponseEntity<String> cancelOrder(@PathVariable("id") Long orderId, Authentication authentication) {
+    String userEmail = authentication.getName();
+    orderService.cancelOrder(orderId, userEmail);
+    return ResponseEntity.ok("Đã hủy đơn hàng thành công.");
+  }
+
 }

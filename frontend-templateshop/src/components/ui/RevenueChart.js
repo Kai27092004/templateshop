@@ -23,7 +23,7 @@ const RevenueChart = ({ data }) => {
     <div className="bg-white p-6 rounded-lg shadow h-96">
       <h3 className="text-lg font-medium text-gray-900 mb-4">Phân tích doanh thu</h3>
       <ResponsiveContainer width="100%" height="100%">
-        <ComposedChart data={data} margin={{ top: 40, right: 20, bottom: 20, left: 20 }}>
+        <ComposedChart data={data} margin={{ top: 40, right: 20, bottom: 20, left: 30 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="label" tick={{ fontSize: 12 }} />
           <YAxis yAxisId="left" label={{ value: 'Doanh thu (VND)', position: 'top', offset: 20, dx: 35, fill: '#8884d8' }} tickFormatter={(value) => new Intl.NumberFormat('vi-VN').format(value)} />

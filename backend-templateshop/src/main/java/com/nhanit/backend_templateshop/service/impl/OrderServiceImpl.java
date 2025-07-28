@@ -189,4 +189,24 @@ public class OrderServiceImpl implements OrderService {
     order.setStatus(OrderStatus.COMPLETED);
     return orderRepository.save(order);
   }
+
+  @Override
+  @Transactional
+  public void cancelOrder(Long orderId, String userEmail) {
+    Order order = orderRepository.findById(orderId)
+        .orElseThrow(() -> new ResourceNotFoundException("Order", "id", orderId));
+
+    // Chỉ chủ đơn hàng mới được hủy
+    if (!order.getUser().getEmail().equals(userEmail)) {
+      throw new AppException("Bạn không có quyền hủy đơn hàng này", HttpStatus.FORBIDDEN);
+    }
+
+    // Chỉ cho phép hủy đơn hàng đang chờ thanh toán
+    if (order.getStatus() != OrderStatus.PENDING) {
+      throw new AppException("Chỉ có thể hủy đơn hàng đang chờ thanh toán.", HttpStatus.BAD_REQUEST);
+    }
+
+    order.setStatus(OrderStatus.CANCELLED);
+    orderRepository.save(order);
+  }
 }

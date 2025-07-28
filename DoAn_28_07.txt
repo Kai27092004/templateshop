@@ -1,0 +1,1 @@
+Công việc làm hôm nay: Thêm logic cancel, Tích hợp trang sản phẩm (thêm hiệu ứng cho ProductCard), sửa navbar liên kết với trang sản phẩm, sửa các liên kết load trang cuộn lên đầu, thêm ScrollToTop

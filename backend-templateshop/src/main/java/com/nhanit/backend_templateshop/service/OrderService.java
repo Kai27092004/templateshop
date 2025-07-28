@@ -18,4 +18,6 @@ public interface OrderService {
   List<OrderResponse> getAllOrders();
 
   Order confirmOrderPayment(Long orderId, String userEmail);
+
+  void cancelOrder(Long orderId, String userEmail);
 }
