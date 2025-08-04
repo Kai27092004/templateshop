@@ -42,7 +42,7 @@ const ProductCard = ({ template }) => {
           <img
             src={imageUrl}
             alt={template.name}
-            className="absolute top-0 left-0 w-full h-auto object-cover object-top transition-transform group-hover:duration-[1500ms] ease-linear group-hover:-translate-y-[calc(100%-300px)] duration-0"
+            className="absolute top-0 left-0 w-full h-auto object-cover object-top transition-transform group-hover:duration-[3500ms] ease-linear group-hover:-translate-y-[calc(100%-300px)] duration-0"
           />
           <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         </div>

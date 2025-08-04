@@ -18,9 +18,6 @@ CREATE TABLE IF NOT EXISTS users
     role				VARCHAR(20)		    NOT NULL DEFAULT 'USER', -- Mặc định là 'Người dùng', có thể là 'Quản trị viên'
     created_at			TIMESTAMP			DEFAULT CURRENT_TIMESTAMP
 );
--- SET FOREIGN_KEY_CHECKS = 0;
--- TRUNCATE TABLE users;
--- SET FOREIGN_KEY_CHECKS = 1;
 
 -- Bảng categories
 CREATE TABLE IF NOT EXISTS categories
@@ -73,18 +70,25 @@ CREATE TABLE order_details (
     UNIQUE KEY `unique_order_template` (`order_id`, `template_id`)
 );
 
+-- SET FOREIGN_KEY_CHECKS = 0;
+-- TRUNCATE TABLE users;
+-- TRUNCATE TABLE categories;
+-- TRUNCATE TABLE templates;
+-- TRUNCATE TABLE orders;
+-- TRUNCATE TABLE order_details;
+-- SET FOREIGN_KEY_CHECKS = 1;
+
 -- =================================================================================
 -- Chèn dữ liệu mẫu để kiểm thử
 -- =================================================================================
-USE template_shop_db;
 -- =================================================================
 -- 1. TẠO 4 DANH MỤC
 -- =================================================================
 INSERT INTO `categories` (`id`, `name`, `slug`) VALUES
-(1, 'Landing Page Bất động sản', 'bat-dong-san'),
-(2, 'Landing Page Thời trang & Mỹ phẩm', 'thoi-trang-my-pham'),
-(3, 'Landing Page Giáo dục & Khóa học', 'giao-duc-khoa-hoc'),
-(4, 'Landing Page Du lịch & Sự kiện', 'du-lich-su-kien');
+(1, 'Thức ăn & Đồ uống', 'thuc-an-do-uong'),
+(2, 'Sức khỏe & Mỹ phẩm', 'thoi-trang-my-pham'),
+(3, 'Cửa hàng nội thất', 'cua-hang-noi-that'),
+(4, 'Trang sức & Phụ kiện', 'trang-suc-phu-kien');
 
 -- =================================================================
 -- 2. TẠO 1 ADMIN VÀ 9 NGƯỜI DÙNG
@@ -107,16 +111,15 @@ INSERT INTO `users` (`id`, `full_name`, `email`, `password`, `role`, `created_at
 -- 3. TẠO 10 TEMPLATE
 -- =================================================================
 INSERT INTO `templates` (`id`, `name`, `slug`, `description`, `price`, `category_id`, `file_path`, `thumbnail_url`, `live_demo_url`, `created_at`, `updated_at`) VALUES
-(1, 'SunVilla Real Estate', 'sunvilla-real-estate', 'Template bất động sản sang trọng, hiện đại, tối ưu cho dự án biệt thự, nghỉ dưỡng.', 450000, 1, 'sunvilla.zip', 'images/thumb-real-estate-1.jpg', '#', NOW(), NOW()),
-(2, 'Metro Fashion Store', 'metro-fashion-store', 'Template cho cửa hàng thời trang, phong cách tối giản, tập trung vào sản phẩm.', 300000, 2, 'metro.zip', 'images/thumb-fashion-1.jpg', '#', NOW(), NOW()),
-(3, 'EduHub Online Course', 'eduhub-online-course', 'Template cho các khóa học trực tuyến, tích hợp form đăng ký và giới thiệu giảng viên.', 350000, 3, 'eduhub.zip', 'images/thumb-education-1.jpg', '#', NOW(), NOW()),
-(4, 'TravelGo Adventure Tours', 'travelgo-adventure-tours', 'Template du lịch, tour mạo hiểm với hiệu ứng parallax và gallery ảnh ấn tượng.', 320000, 4, 'travelgo.zip', 'images/thumb-travel-1.jpg', '#', NOW(), NOW()),
-(5, 'Modern Apartment Complex', 'modern-apartment-complex', 'Template giới thiệu dự án chung cư cao cấp, đầy đủ mặt bằng và tiện ích.', 500000, 1, 'apartment.zip', 'images/thumb-real-estate-2.jpg', '#', NOW(), NOW()),
-(6, 'Luxe Cosmetics Brand', 'luxe-cosmetics-brand', 'Template cho thương hiệu mỹ phẩm, tông màu pastel, thiết kế thanh lịch.', 280000, 2, 'luxe.zip', 'images/thumb-fashion-2.jpg', '#', NOW(), NOW()),
-(7, 'E-Learning Platform', 'elearning-platform', 'Template nền tảng học tập, cho phép bán nhiều khóa học, có trang blog.', 400000, 3, 'elearning.zip', 'images/thumb-education-2.jpg', '#', NOW(), NOW()),
-(8, 'City Event Conference', 'city-event-conference', 'Template cho sự kiện, hội thảo, có lịch trình, diễn giả và form đăng ký tham dự.', 250000, 4, 'conference.zip', 'images/thumb-event-1.jpg', '#', NOW(), NOW()),
-(9, 'Luxury Watch Showcase', 'luxury-watch-showcase', 'Template one-page giới thiệu sản phẩm đồng hồ cao cấp, hiệu ứng animation tinh tế.', 290000, 2, 'watch.zip', 'images/thumb-fashion-3.jpg', '#', NOW(), NOW()),
-(10, 'Minimalist Portfolio', 'minimalist-portfolio', 'Template portfolio đơn giản, sạch sẽ, phù hợp cho các freelancer, nhiếp ảnh gia.', 150000, 2, 'portfolio.zip', 'images/thumb-portfolio-1.jpg', '#', NOW(), NOW());
+(1, 'SHOPNK Bakery', 'shopnk-bakery', 'Template cho cửa hàng bánh mì.', 450000, 1, 'bakery.zip', 'images/bakery.png', 'https://pagefly.io/pages/preview?template=boulanger', NOW(), NOW()),
+(2, 'SHOPNK Drink Store', 'shopnk-drink-store', 'Template cho cửa hàng nước uống.', 300000, 1, 'drink.zip', 'images/drink.png', 'https://pagefly.io/pages/preview?template=fizzy', NOW(), NOW()),
+(3, 'SHOPNK Beauty', 'shopnk-beauty', 'Template cho cửa hàng mỹ phẩm', 350000, 2, 'beauty.zip', 'images/beauty.png', 'https://pagefly.io/pages/preview?template=chloe', NOW(), NOW()),
+(4, 'SHOPNK Medisense', 'shopnk-medisense', 'Template cho sản phẩm sức khỏe.', 320000, 2, 'medisense.zip', 'images/medisense.png', 'https://pagefly.io/pages/preview?template=medisense', NOW(), NOW()),
+(5, 'SHOPNK Brook', 'shopnk-brook', 'Template cho cửa hàng nội thất Brook.', 500000, 3, 'brook.zip', 'images/brook.png', 'https://pagefly.io/pages/preview?template=brookwood', NOW(), NOW()),
+(6, 'SHOPNK Interno', 'shopnk-interno', 'Template cho cửa hàng nội thất Interno.', 280000, 3, 'interno.zip', 'images/interno.png', 'https://pagefly.io/pages/preview?template=interno', NOW(), NOW()),
+(7, 'SHOPNK Nivellia', 'shopnk-nivellia', 'Template cho cửa hàng trang sức.', 400000, 4, 'nivellia.zip', 'images/nivellia.png', 'https://pagefly.io/pages/preview?template=nivellia', NOW(), NOW()),
+(8, 'SHOPNK Packy', 'shopnk-packy', 'Template cho cửa hàng phụ kiện.', 250000, 4, 'packy.zip', 'images/packy.png', 'https://pagefly.io/pages/preview?template=packy', NOW(), NOW());
+
 
 -- =================================================================
 -- 4. TẠO 100 ĐƠN HÀNG (TỰ ĐỘNG)
