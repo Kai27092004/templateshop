@@ -13,6 +13,7 @@ const LoginPage = () => {
   });
   const [error, setError] = useState('');
 
+  // Lấy đường dẫn trang trước đó để quay lại sau khi login
   const from = location.state?.from?.pathname || "/";
 
   const handleChange = (e) => {
@@ -23,11 +24,10 @@ const LoginPage = () => {
     e.preventDefault();
     setError('');
     try {
-      // Gọi api để đăng nhập
       const response = await loginUser(formData);
-      // Nếu thành công, gọi hàm login từ context để lưu token
+      // Hàm login từ AuthContext đã được sửa để dùng 'user_token'
       login(response.data.accessToken);
-      // Điều hướng về trang chủ 
+      // Điều hướng về trang đã cố gắng truy cập trước đó, hoặc trang chủ
       navigate(from, { replace: true });
     } catch (err) {
       setError('Đăng nhập thất bại. Vui lòng kiểm tra email hoặc mật khẩu.');
@@ -37,7 +37,6 @@ const LoginPage = () => {
     <div className="min-h-screen bg-[#eaf3f7] py-10 flex items-center justify-center">
       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
         <h1 className="text-2xl sm:text-3xl font-bold text-[#7c3aed] mb-6 text-center">Đăng nhập</h1>
-        {/* Form đăng nhập */}
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label htmlFor="email" className="block text-gray-700 font-medium mb-1">Email</label>
@@ -66,7 +65,6 @@ const LoginPage = () => {
               onChange={handleChange}
             />
           </div>
-          {/* Hiển thị thông báo lỗi */}
           {error && <p className="text-sm text-red-600">{error}</p>}
           <div>
             <button

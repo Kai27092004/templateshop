@@ -4,24 +4,41 @@ import { useCart } from '../../contexts/CartContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { API_BASE_URL } from '../../services/api';
 import { EyeIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
+import { useNotification } from '../../contexts/NotificationContext';
 
-const ProductCard = ({ template }) => {
-  const { addToCart } = useCart();
+const ProductCard = ({ template, purchasedIds }) => {
+  const { cartItems, addToCart } = useCart();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const { showNotification } = useNotification();
 
   const imageUrl = template.thumbnailUrl ? `${API_BASE_URL}/files/${template.thumbnailUrl}` : 'https://placehold.co/270x462?text=No+Image';
   const formattedPrice = new Intl.NumberFormat('vi-VN').format(template.price);
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
-    if (isAuthenticated) {
-      addToCart(template);
-    } else {
-      alert('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.');
+    if (!isAuthenticated) {
+      showNotification('Vui lòng đăng nhập để mua hàng.', 'warning');
       navigate('/login', { state: { from: location } });
+      return;
     }
+    // KIỂM TRA RÀNG BUỘC
+    const isPurchased = purchasedIds.includes(template.id);
+    const isInCart = cartItems.some(item => item.id === template.id);
+
+    if (isPurchased) {
+      showNotification('Bạn đã mua sản phẩm này rồi.', 'warning');
+      return;
+    }
+    if (isInCart) {
+      showNotification('Sản phẩm đã có trong giỏ hàng.', 'warning');
+      return;
+    }
+
+    // Nếu không có vấn đề gì, thêm vào giỏ và hiện thông báo thành công
+    addToCart(template);
+    showNotification('Đã thêm vào giỏ hàng!', 'success');
   };
 
   const handleViewDemo = (e) => {

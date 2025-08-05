@@ -4,9 +4,9 @@ import { getAllUsers, createUser, updateUser, deleteUser } from "../../services/
 import ConfirmModal from "../../components/ui/ConfirmModal";
 import SuccessToast from "../../components/ui/SuccessToast";
 import CustomPagination from "../../components/ui/CustomPagination";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAdminAuth } from "../../contexts/AdminAuthContext";
 
-const UsersPage = () => {
+const UserManager = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -23,7 +23,7 @@ const UsersPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
 
-  const { user: currentAdmin } = useAuth();
+  const { adminUser: currentAdmin } = useAdminAuth();
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -127,6 +127,7 @@ const UsersPage = () => {
   }), [users]);
 
   if (loading) return <div className="p-6 text-center">Đang tải...</div>;
+  if (!currentAdmin) return <div className="p-6 text-center">Đang tải thông tin admin...</div>;
 
   return (
     <>
@@ -325,4 +326,4 @@ const UsersPage = () => {
   );
 };
 
-export default UsersPage;
+export default UserManager; // Đổi tên export

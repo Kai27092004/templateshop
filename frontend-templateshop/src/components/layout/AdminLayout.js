@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import {
   HomeIcon,
   ShoppingBagIcon,
@@ -13,13 +13,19 @@ import {
   ArrowRightOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 import { Link, useLocation } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAdminAuth } from "../../contexts/AdminAuthContext";
 
 
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
-  const { user, logout } = useAuth();
+  const { adminUser, logoutAdmin } = useAdminAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logoutAdmin();
+    navigate('/admin/login'); // Chuyển hướng về trang đăng nhập admin sau khi logout
+  };
 
   const navigation = [
     {
@@ -139,8 +145,8 @@ const AdminLayout = () => {
 
             <div className="hidden lg:flex items-center space-x-4">
               <div className="text-right">
-                <p className="text-sm font-medium text-gray-900">{user?.fullName || 'Admin'}</p>
-                <p className="text-xs text-gray-500">{user?.email || 'admin@email.com'}</p>
+                <p className="text-sm font-medium text-gray-900">{adminUser?.fullName || 'Admin'}</p>
+                <p className="text-xs text-gray-500">{adminUser?.email || 'admin@email.com'}</p>
               </div>
               <img
                 className="h-8 w-8 rounded-full"
@@ -148,7 +154,7 @@ const AdminLayout = () => {
                 alt="Admin"
               />
               <button
-                onClick={logout}
+                onClick={handleLogout}
                 className="rounded-full p-2 text-gray-400 hover:bg-red-100 hover:text-red-500"
               >
                 <ArrowRightOnRectangleIcon className="h-5 w-5" />

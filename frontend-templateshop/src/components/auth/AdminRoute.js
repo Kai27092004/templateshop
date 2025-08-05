@@ -1,16 +1,17 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
+// SỬA LẠI IMPORT
+import { useAdminAuth } from '../../contexts/AdminAuthContext';
 
 const AdminRoute = ({ children }) => {
-  const { isAuthenticated, isAdmin, loading } = useAuth();
+  // SỬA LẠI HOOK VÀ CÁC BIẾN
+  const { isAuthenticated, isAdmin, loading } = useAdminAuth();
 
   if (loading) {
     return <div>Đang tải dữ liệu.....</div>;
   }
 
   if (!isAuthenticated || !isAdmin) {
-    // Nếu không đăng nhập hoặc không phải admin, đá về trang chủ
     return <Navigate to="/admin/login" replace />;
   }
 

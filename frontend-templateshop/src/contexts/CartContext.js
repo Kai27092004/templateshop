@@ -44,8 +44,6 @@ export const CartProvider = ({ children }) => {
       // Nếu chưa có, thêm sản phẩm mới vào giỏ với số lượng là 1
       return [...prevItems, { ...product, quantity: 1 }];
     });
-    // Bạn có thể thêm một thông báo "Đã thêm vào giỏ hàng" ở đây
-    alert(`Đã thêm "${product.name}" vào giỏ hàng!`);
   };
 
   // Hàm xóa sản phẩm khỏi giỏ

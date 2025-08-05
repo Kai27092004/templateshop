@@ -19,3 +19,5 @@ export const confirmOrderPayment = (orderId) => {
 export const cancelOrder = (orderId) => {
   return api.post(`/orders/${orderId}/cancel`);
 };
+
+export const getPurchasedTemplateIds = () => api.get('/account/orders/purchased-ids');

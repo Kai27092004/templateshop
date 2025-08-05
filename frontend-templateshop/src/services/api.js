@@ -1,28 +1,38 @@
 import axios from 'axios';
 
 export const API_BASE_URL = 'http://localhost:8080/api/v1';
-// Tạo một instance của axios với cấu hình cơ bản
+
 const api = axios.create({
-  baseURL: API_BASE_URL, //URL gốc của backend
+  baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json'
   },
 });
 
+// SỬA ĐỔI INTERCEPTOR
 api.interceptors.request.use(
   (config) => {
-    // Lấy token từ localStorage
-    const token = localStorage.getItem('token');
-    // Nếu có token, đính kèm nó vào header Authorization
+    let token;
+
+    // Kiểm tra xem URL của request có phải là dành cho admin không
+    if (config.url.startsWith('/admin')) {
+      // Nếu là API admin, ưu tiên lấy admin_token
+      token = localStorage.getItem('admin_token');
+    } else {
+      // Ngược lại, lấy user_token cho các API thông thường
+      token = localStorage.getItem('user_token');
+    }
+
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
-    return config; // Trả về config đã được chỉnh sửa
+
+    return config;
   },
   (error) => {
-    // Xử lý lỗi nếu có
     return Promise.reject(error);
   }
 );
+
 
 export default api;

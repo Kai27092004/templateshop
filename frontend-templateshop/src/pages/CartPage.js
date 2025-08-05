@@ -40,8 +40,8 @@ const CartPage = () => {
       <div className="text-center p-10">
         <h1 className="text-2xl sm:text-3xl font-bold mb-4">Giỏ hàng của bạn đang trống</h1>
         <p className="text-gray-600 mb-6">Hãy khám phá và thêm sản phẩm vào giỏ hàng nhé!</p>
-        <Link to="/" className="bg-blue-600 text-white py-2 px-6 rounded-md hover:bg-blue-700 transition-colors">
-          Quay lại Trang Chủ
+        <Link to="/san-pham" className="bg-blue-600 text-white py-2 px-6 rounded-md hover:bg-blue-700 transition-colors">
+          Quay lại Trang sản phẩm
         </Link>
       </div>
     );
