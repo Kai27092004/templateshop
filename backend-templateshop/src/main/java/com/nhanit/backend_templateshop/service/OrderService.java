@@ -20,4 +20,8 @@ public interface OrderService {
   Order confirmOrderPayment(Long orderId, String userEmail);
 
   void cancelOrder(Long orderId, String userEmail);
+
+  List<String> getPurchasedTemplateIds();
+
+  List<String> getPendingTemplateIds();
 }

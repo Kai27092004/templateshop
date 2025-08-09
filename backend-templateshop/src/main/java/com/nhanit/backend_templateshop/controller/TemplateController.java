@@ -24,7 +24,6 @@ import com.nhanit.backend_templateshop.dto.response.TemplateResponse;
 import com.nhanit.backend_templateshop.service.TemplateService;
 
 @RestController
-@RequestMapping("/api/v1/templates")
 public class TemplateController {
 
   @Autowired
@@ -34,19 +33,19 @@ public class TemplateController {
   private ObjectMapper objectMapper;
 
   // CÁC API CÔNG KHAI
-  @GetMapping
+  @GetMapping("/api/v1/templates")
   public ResponseEntity<List<TemplateResponse>> getAllTemplates() {
     return ResponseEntity.ok(templateService.getAllTemplates());
   }
 
-  @GetMapping("/{slug}")
+  @GetMapping("/api/v1/templates/{slug}")
   public ResponseEntity<TemplateResponse> getTemplateBySlug(@PathVariable(name = "slug") String templateSlug) {
     return ResponseEntity.ok(templateService.getTemplateBySlug(templateSlug));
   }
 
   // CÁC API YÊU CẦU QUYỀN ADMIN
   @PreAuthorize("hasRole('ADMIN')")
-  @PostMapping(consumes = { "multipart/form-data" })
+  @PostMapping(value = "/api/v1/admin/templates",consumes = { "multipart/form-data" })
   public ResponseEntity<TemplateResponse> createTemplate(
       // @RequestPart("data"): Lấy phần dữ liệu JSON có tên là "data"
       // @RequestPart("file"): Lấy phần file có tên là "file"
@@ -60,7 +59,7 @@ public class TemplateController {
     return new ResponseEntity<>(createdTemplate, HttpStatus.CREATED);
   }
 
-  @PutMapping(value = "/{id}", consumes = { "multipart/form-data" })
+  @PutMapping(value = "/api/v1/admin/templates/{id}", consumes = { "multipart/form-data" })
   @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<TemplateResponse> updateTemplate(
       @PathVariable("id") Long templateId,
@@ -80,7 +79,7 @@ public class TemplateController {
   }
 
   @PreAuthorize("hasRole('ADMIN')")
-  @DeleteMapping("/{id}")
+  @DeleteMapping("/api/v1/admin/templates/{id}")
   public ResponseEntity<String> deleteTemplate(@PathVariable("id") Long templateId) {
     templateService.deleteTemplate(templateId);
     return ResponseEntity.ok("Đã xóa template thành công");

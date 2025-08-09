@@ -1,4 +1,4 @@
-Công việc làm hôm nay: Tách luồng đăng nhập giữa admin và user, Cải thiện Thông báo "Thêm vào giỏ hàng", Ràng buộc Giỏ hàng và Áp dụng Thông báo, Ràng buộc sản phẩm đã mua (chưa được còn lỗi)
+Công việc làm hôm nay: Tách luồng đăng nhập giữa admin và user, Cải thiện Thông báo Thêm vào giỏ hàng, Ràng buộc Giỏ hàng và Áp dụng Thông báo, Ràng buộc sản phẩm đã mua (chưa được còn lỗi)
 --- Tách luồng đăng nhập giữa admin và user
 	1/ Cập nhật frontend
 		+ tạo file AdminAuthContext

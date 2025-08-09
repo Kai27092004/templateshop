@@ -23,20 +23,19 @@ import com.nhanit.backend_templateshop.service.CategoryService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/v1/categories")
 public class CategoryController {
 
   @Autowired
   private CategoryService categoryService;
 
   // Api này ai cũng có thể truy cập được
-  @GetMapping
+  @GetMapping("/api/v1/categories")
   public ResponseEntity<List<CategoryResponse>> getAllCategories() {
     return ResponseEntity.ok(categoryService.getAllCategories());
   }
 
   // Api này ai cũng có thể truy cập được
-  @GetMapping("/{id}")
+  @GetMapping("/api/v1/categories/{id}")
   public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable(name = "id") Long categoryId) {
     return ResponseEntity.ok(categoryService.getCategoryById(categoryId));
   }
@@ -44,20 +43,20 @@ public class CategoryController {
   // @PreAuthorize("hasRole('ADMIN')"): Chỉ những người dùng có vai trò ADMIN
   // mới được phép gọi API này.
   @PreAuthorize("hasRole('ADMIN')")
-  @PostMapping
+  @PostMapping("/api/v1/admin/categories")
   public ResponseEntity<CategoryResponse> createCategory(@Valid @RequestBody CreateCategoryRequest request) {
     return new ResponseEntity<>(categoryService.createCategory(request), HttpStatus.CREATED);
   }
 
   @PreAuthorize("hasRole('ADMIN')")
-  @PutMapping("/{id}")
+  @PutMapping("/api/v1/admin/categories/{id}")
   public ResponseEntity<CategoryResponse> updateCategory(@PathVariable(name = "id") Long categoryId,
       @Valid @RequestBody UpdateCategoryRequest request) {
     return ResponseEntity.ok(categoryService.updateCategory(categoryId, request));
   }
 
   @PreAuthorize("hasRole('ADMIN')")
-  @DeleteMapping("/{id}")
+  @DeleteMapping("/api/v1/admin/categories/{id}")
   public ResponseEntity<String> deleteCategory(@PathVariable(name = "id") Long categoryId) {
     categoryService.deleteCategory(categoryId);
     return ResponseEntity.ok("Đã xóa danh mục thành công.");

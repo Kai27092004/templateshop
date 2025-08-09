@@ -139,7 +139,7 @@ const TemplateManager = () => {
       setToastInfo({ show: true, message: 'Xóa sản phẩm thành công!' });
       fetchData();
     } catch (err) {
-      setError(`Lỗi khi xóa: ${err.response?.data?.message || err.message}`);
+      setError(`Lỗi không thể xóa danh mục vì có đơn hàng liên quan`);
     } finally {
       setProductToDelete(null);
     }

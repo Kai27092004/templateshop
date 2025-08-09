@@ -3,10 +3,10 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../../contexts/CartContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { API_BASE_URL } from '../../services/api';
-import { EyeIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
 import { useNotification } from '../../contexts/NotificationContext';
+import GradientButton from '../ui/GradientButton';
 
-const ProductCard = ({ template, purchasedIds }) => {
+const ProductCard = ({ template, purchasedIds, pendingIds }) => {
   const { cartItems, addToCart } = useCart();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
@@ -24,11 +24,16 @@ const ProductCard = ({ template, purchasedIds }) => {
       return;
     }
     // KIỂM TRA RÀNG BUỘC
-    const isPurchased = purchasedIds.includes(template.id);
+    const isPurchased = purchasedIds.map(String).includes(String(template.id));
     const isInCart = cartItems.some(item => item.id === template.id);
+    const isPending = pendingIds.includes(String(template.id));
 
     if (isPurchased) {
-      showNotification('Bạn đã mua sản phẩm này rồi.', 'warning');
+      showNotification('Bạn đã mua sản phẩm này rồi', 'warning');
+      return;
+    }
+    if (isPending) {
+      showNotification('Sản phẩm đang chờ thanh toán trong hồ sơ của bạn', 'warning');
       return;
     }
     if (isInCart) {
@@ -66,19 +71,25 @@ const ProductCard = ({ template, purchasedIds }) => {
       </Link>
       <div className="p-5 flex-1 flex flex-col">
         <p className="text-xs text-gray-500 mb-1">{template.category?.name || 'Chưa phân loại'}</p>
-        <h2 className="text-base font-bold text-gray-800 mb-3 group-hover:text-[#7c3aed] transition-colors line-clamp-2 h-12">
+        <h2 className="text-base font-bold text-gray-800 mb-1 group-hover:text-[#7c3aed] transition-colors line-clamp-2">
           {template.name}
         </h2>
         <div className="mt-auto flex items-center justify-between">
-          <p className="text-lg font-bold text-blue-600">{formattedPrice} đ</p>
-          <div className="flex items-center gap-2">
-            <button onClick={handleViewDemo} className="p-2 rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition-colors" title="Xem Demo">
-              <EyeIcon className="h-5 w-5" />
-            </button>
-            <button onClick={handleAddToCart} className="p-2 rounded-full text-gray-500 hover:bg-blue-50 hover:text-blue-600 transition-colors" title="Thêm vào giỏ">
-              <ShoppingCartIcon className="h-5 w-5" />
-            </button>
-          </div>
+          <p className="text-lg font-bold text-blue-600 mb-1">{formattedPrice} đ</p>
+        </div>
+        <div className="flex flex-col gap-2 mt-auto">
+          <GradientButton
+            className="w-full py-2 rounded-lg font-semibold text-base shadow-lg"
+            onClick={handleAddToCart}
+          >
+            Thêm vào giỏ hàng
+          </GradientButton>
+          <button
+            className="w-full py-2 rounded-lg font-semibold text-base border border-[#7c3aed] text-[#7c3aed] bg-white hover:bg-[#f3e8ff] transition-colors"
+            onClick={handleViewDemo}
+          >
+            Live preview
+          </button>
         </div>
       </div>
     </div>

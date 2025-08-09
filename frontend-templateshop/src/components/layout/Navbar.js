@@ -154,7 +154,7 @@ const Navbar = () => {
             {/* Shopping Cart - Mobile */}
             <div className="relative">
               <button className="text-gray-700 hover:text-[#7c3aed] p-1 sm:p-2">
-                <HiOutlineShoppingBag size={20} className="sm:w-6 sm:h-6" />
+                <NavLink to="/gio-hang"><HiOutlineShoppingBag size={20} className="sm:w-6 sm:h-6" /></NavLink>
               </button>
               {itemCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-[#7c3aed] text-white text-xs rounded-full h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center font-bold text-xs">

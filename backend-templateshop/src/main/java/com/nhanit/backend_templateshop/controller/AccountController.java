@@ -95,4 +95,14 @@ public class AccountController {
         .body(resource);
 
   }
+
+  @GetMapping("/orders/purchased-ids")
+  public ResponseEntity<List<String>> getPurchasedIds() {
+    return ResponseEntity.ok(orderService.getPurchasedTemplateIds());
+  }
+
+  @GetMapping("/orders/pending-ids")
+  public ResponseEntity<List<String>> getPendingIds() {
+    return ResponseEntity.ok(orderService.getPendingTemplateIds());
+  }
 }

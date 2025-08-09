@@ -20,4 +20,8 @@ export const cancelOrder = (orderId) => {
   return api.post(`/orders/${orderId}/cancel`);
 };
 
-export const getPurchasedTemplateIds = () => api.get('/account/orders/purchased-ids');
+export const getPurchasedTemplateIds = () => {
+  return api.get('/account/orders/purchased-ids');
+};
+
+export const getPendingTemplateIds = () => api.get('/account/orders/pending-ids');

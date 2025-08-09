@@ -122,10 +122,10 @@ const HomePage = () => {
 
 	// Mảng ảnh tương ứng cho portfolio
 	const portfolioImages = [
-		"https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=300&fit=crop",
 		"https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&h=300&fit=crop",
-		"https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=300&fit=crop",
-		"https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=300&fit=crop"
+		"https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=300&fit=crop",
+		"https://picart.vn/wp-content/uploads/2020/04/gallery-phong-khach-picart-01.jpg",
+		"https://media.istockphoto.com/id/155013169/vi/anh/trang-s%E1%BB%A9c-tr%C3%AAn-m%C3%A0n-h%C3%ACnh-c%E1%BB%ADa-s%E1%BB%95.jpg?s=612x612&w=0&k=20&c=VvQvqrz7e8Xu6oS-5aIYLnjXG2Le1Y_fOm9RfKhgpyo="
 	];
 
 	// Counter animation effect

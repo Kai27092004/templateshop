@@ -11,7 +11,8 @@ export const getTemplateBySlug = (slug) => {
 
 // --- API cho Admin ---
 export const createTemplate = (formData) => {
-  return api.post('/templates', formData, {
+  // Thêm /admin vào đường dẫn
+  return api.post('/admin/templates', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -19,7 +20,8 @@ export const createTemplate = (formData) => {
 };
 
 export const updateTemplate = (id, formData) => {
-  return api.put(`/templates/${id}`, formData, {
+  // Thêm /admin vào đường dẫn
+  return api.put(`/admin/templates/${id}`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -27,5 +29,6 @@ export const updateTemplate = (id, formData) => {
 };
 
 export const deleteTemplate = (id) => {
-  return api.delete(`/templates/${id}`);
+  // Thêm /admin vào đường dẫn
+  return api.delete(`/admin/templates/${id}`);
 };

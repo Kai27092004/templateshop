@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -208,5 +210,25 @@ public class OrderServiceImpl implements OrderService {
 
     order.setStatus(OrderStatus.CANCELLED);
     orderRepository.save(order);
+  }
+
+  @Override
+  public List<String> getPurchasedTemplateIds() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String currentUsername = authentication.getName();
+    User currentUser = userRepository.findByEmail(currentUsername)
+        .orElseThrow(() -> new ResourceNotFoundException("User", "email", currentUsername));
+
+    return orderRepository.findPurchasedTemplateIdsByUserId(currentUser.getId());
+  }
+
+  @Override
+  public List<String> getPendingTemplateIds() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String currentUsername = authentication.getName();
+    User currentUser = userRepository.findByEmail(currentUsername)
+        .orElseThrow(() -> new ResourceNotFoundException("User", "email", currentUsername));
+
+    return orderRepository.findPendingTemplateIdsByUserId(currentUser.getId());
   }
 }

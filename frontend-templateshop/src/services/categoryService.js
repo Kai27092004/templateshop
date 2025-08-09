@@ -11,13 +11,14 @@ export const getCategoryById = (id) => {
 
 // --- API cho Admin ---
 export const createCategory = (data) => {
-  return api.post('/categories', data);
+  // Thêm /admin vào đường dẫn
+  return api.post('/admin/categories', data);
 };
 
 export const updateCategory = (id, data) => {
-  return api.put(`/categories/${id}`, data);
+  return api.put(`/admin/categories/${id}`, data);
 };
 
 export const deleteCategory = (id) => {
-  return api.delete(`/categories/${id}`);
+  return api.delete(`/admin/categories/${id}`);
 };

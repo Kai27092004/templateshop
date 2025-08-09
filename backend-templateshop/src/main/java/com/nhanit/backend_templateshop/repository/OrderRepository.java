@@ -56,4 +56,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
                         "GROUP BY month " +
                         "ORDER BY month")
         List<Object[]> countOrdersByMonthInYear(@Param("year") int year);
+
+        @Query("SELECT od.template.id FROM OrderDetail od WHERE od.order.user.id = :userId AND od.order.status = com.nhanit.backend_templateshop.entity.OrderStatus.COMPLETED")
+        List<String> findPurchasedTemplateIdsByUserId(@Param("userId") Long userId);
+
+        @Query("SELECT od.template.id FROM OrderDetail od WHERE od.order.user.id = :userId AND od.order.status = com.nhanit.backend_templateshop.entity.OrderStatus.PENDING")
+        List<String> findPendingTemplateIdsByUserId(@Param("userId") Long userId);
 }
