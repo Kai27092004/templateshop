@@ -1,4 +1,0 @@
-Công việc làm hôm nay: Quản lý sản phẩm (tiếp tục), Quản lý người dùng, Hoàn thành trang Admin
-1/ Sắp xếp sản phẩm theo ngày tạo
-2/ Kết nối API và Hoàn thiện UsersPage.jsx
-3/ Cập nhật App.js để Sử dụng Trang Mới

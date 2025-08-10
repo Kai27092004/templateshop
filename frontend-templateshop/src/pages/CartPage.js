@@ -7,7 +7,7 @@ import { FaTrash } from "react-icons/fa";
 import { API_BASE_URL } from '../services/api';
 
 const CartPage = () => {
-  const { cartItems, cartTotal, updateQuantity, removeFromCart } = useCart();
+  const { cartItems, cartTotal, updateQuantity, removeFromCart, clearCart } = useCart();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState('');
@@ -24,6 +24,7 @@ const CartPage = () => {
       const response = await createOrder(orderData);
       const orderIdMessage = response.data;
       const orderId = orderIdMessage.split(': ')[1];
+      clearCart();
       navigate(`/payment/${orderId}`);
     } catch (err) {
       console.error("Checkout error: ", err);

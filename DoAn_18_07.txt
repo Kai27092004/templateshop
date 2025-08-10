@@ -1,6 +1,0 @@
-Công việc làm hôm nay: Hoàn thành trang Quản lý đơn hàng
-1/ Cập nhật Component
-	+ Thêm các UI mặc định: ConfirmModal, Toastsuccess, Pagination
-	+ Thêm các bộ lọc
-	+ Hoàn thiện OrderManager
-2/ Cập nhật App.js để Sử dụng Trang Mới
